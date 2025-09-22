@@ -1,0 +1,5 @@
+# 1. 修改项目文件中的 Bundle ID
+sed -i '' 's/org\.reactjs\.native\.example\.\$(PRODUCT_NAME:rfc1034identifier)/com.bto.Light/g' ios/taroApp.xcodeproj/project.pbxproj
+
+# 2. 验证修改
+grep "PRODUCT_BUNDLE_IDENTIFIER" ios/taroApp.xcodeproj/project.pbxproj
