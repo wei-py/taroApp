@@ -40,18 +40,21 @@ platform :ios do
       build_number: build_number
     )
 
+    # 获取导出方法
+    export_method = export_method_for(build_type)
+    
     # 使用 gym 来构建和导出
     gym(
       workspace: "taroApp.xcworkspace",
       scheme: "taroApp",
-      export_method: export_method_for(build_type),
+      export_method: export_method,
       export_options: {
-        provisioningProfiles: {
+        "provisioningProfiles" => {
           app_identifier => provisioning_profile_specifier
         },
-        signingStyle: "manual",
-        teamID: team_id,
-        signingCertificate: code_sign_identity
+        "signingStyle" => "manual",
+        "teamID" => team_id,
+        "signingCertificate" => code_sign_identity
       },
       export_xcargs: "-allowProvisioningUpdates",
       clean: true
@@ -67,6 +70,14 @@ platform :ios do
     
     # 检查是否有用户名配置（备用方式）
     username = ENV["APP_STORE_CONNECT_USERNAME"]
+    
+    # 查找IPA文件
+    ipa_path = Dir.glob("*.ipa").first
+    if ipa_path.nil?
+      UI.user_error!("No IPA file found in current directory")
+    end
+    
+    UI.message("Found IPA file: #{ipa_path}")
     
     if api_key_path && api_key_id && api_issuer_id
       # 展开路径中的 ~ 符号
@@ -90,6 +101,7 @@ platform :ios do
       
       pilot(
         api_key: api_key,
+        ipa: ipa_path,
         skip_waiting_for_build_processing: true,
         skip_submission: true
       )
@@ -98,6 +110,7 @@ platform :ios do
       UI.message("Using username for authentication")
       pilot(
         username: username,
+        ipa: ipa_path,
         skip_waiting_for_build_processing: true,
         skip_submission: true
       )
@@ -105,6 +118,7 @@ platform :ios do
       # 尝试使用默认认证
       UI.message("Using default authentication method")
       pilot(
+        ipa: ipa_path,
         skip_waiting_for_build_processing: true,
         skip_submission: true
       )
