@@ -19,8 +19,8 @@ platform :ios do
   before_all do
     # 设置构建日志详细程度
     set_build_number_repository
-    # 确保项目使用最新的依赖
-    cocoapods
+    # 注释掉 cocoapods，因为 GitHub Actions 工作流中已经单独执行了 pod install
+    # cocoapods
   end
 
   # 更新 Info.plist 文件
@@ -105,39 +105,56 @@ platform :ios do
     )
   end
 
+  # 修复方案
+  
+  ### 1. 修改 Fastfile 中的 lane 名称
+  
+  需要修改 Fastfile 中与内置 action 冲突的 lane 名称：
+  ```
   # 上传到App Store Connect
   desc "上传应用到App Store Connect"
-  lane :upload_to_app_store do |options|
-    # 方式1: 使用API Key (推荐)
-    if ENV["APP_STORE_CONNECT_API_KEY_ID"] && ENV["APP_STORE_CONNECT_ISSUER_ID"] && ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
-      # 保存API Key到临时文件
-      api_key_path = File.join(Dir.tmpdir, "app_store_connect_key.p8")
-      File.open(api_key_path, "w") { |file| file.write(ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]) }
-      
-      upload_to_app_store(
-        api_key_path: api_key_path,
-        api_key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-        api_key_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-        ipa: "taroApp.ipa",
-        skip_metadata: true,
-        skip_screenshots: true,
-        submit_for_review: false,
-        automatic_release: false
-      )
-      
-      # 删除临时API Key文件
-      File.delete(api_key_path) if File.exist?(api_key_path)
-    else
-      # 方式2: 使用用户名密码 (备用)
-      upload_to_app_store(
-        ipa: "taroApp.ipa",
-        skip_metadata: true,
-        skip_screenshots: true,
-        submit_for_review: false,
-        automatic_release: false
-      )
-    end
+  # 将原来的 upload_to_app_store 改为自定义名称，避免冲突
+  lane :publish_to_app_store do |options|
+  # 方式1: 使用API Key (推荐)
+  if ENV["APP_STORE_CONNECT_API_KEY_ID"] && ENV["APP_STORE_CONNECT_ISSUER_ID"] && ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+  # 保存API Key到临时文件
+  api_key_path = File.join(Dir.tmpdir, "app_store_connect_key.p8")
+  File.open(api_key_path, "w") { |file| file.write(ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]) }
+  
+  # 调用内置的 upload_to_app_store action
+  upload_to_app_store(
+  api_key_path: api_key_path,
+  api_key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+  api_key_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
+  ipa: "taroApp.ipa",
+  skip_metadata: true,
+  skip_screenshots: true,
+  submit_for_review: false,
+  automatic_release: false
+  )
+  
+  # 删除临时API Key文件
+  File.delete(api_key_path) if File.exist?(api_key_path)
+  else
+  # 方式2: 使用用户名密码 (备用)
+  upload_to_app_store(
+  ipa: "taroApp.ipa",
+  skip_metadata: true,
+  skip_screenshots: true,
+  submit_for_review: false,
+  automatic_release: false
+  )
   end
+  end
+  
+  # 完整的发布流程
+  desc "完整的iOS应用发布流程: 构建并上传到App Store Connect"
+  lane :release do |options|
+  build_release
+  # 相应地更新调用名称
+  publish_to_app_store
+  end
+  ```
 
   # 完整的发布流程
   desc "完整的iOS应用发布流程: 构建并上传到App Store Connect"

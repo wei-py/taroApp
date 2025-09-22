@@ -99,6 +99,15 @@ jobs:
           cd ios
           bundle update
           bundle exec fastlane build_release
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: ios
+      
+      - name: Install gems
+        run: cd ios && bundle install
       - name: Upload iOS Products
         uses: actions/upload-artifact@v4
         with:
@@ -112,9 +121,9 @@ jobs:
           APP_STORE_CONNECT_API_KEY_ID: ${{ env.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ env.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_CONTENT: ${{ env.APP_STORE_CONNECT_API_KEY_CONTENT }}
-        run: |
+        run:
           cd ios
-          bundle exec fastlane upload_to_app_store
+          bundle exec fastlane publish_to_app_store
       - name: Rename release assets
         if: startsWith(github.ref, 'refs/tags/')
         run: |

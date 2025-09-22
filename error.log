@@ -1,3 +1,368 @@
+Run cd ios
+Fetching gem metadata from https://rubygems.org/........
+Resolving dependencies...
+Fetching rake 13.3.0
+Installing rake 13.3.0
+Fetching nkf 0.2.0
+Fetching rexml 3.4.4
+Fetching base64 0.3.0
+Fetching minitest 5.25.5
+Installing base64 0.3.0
+Installing minitest 5.25.5
+Fetching mutex_m 0.3.0
+Installing rexml 3.4.4
+Installing mutex_m 0.3.0
+Installing nkf 0.2.0 with native extensions
+Fetching json 2.15.0
+Installing json 2.15.0 with native extensions
+Fetching aws-partitions 1.1162.0
+Installing aws-partitions 1.1162.0
+Fetching bigdecimal 3.2.3
+Fetching logger 1.7.0
+Installing bigdecimal 3.2.3 with native extensions
+Installing logger 1.7.0
+Fetching ruby2_keywords 0.0.5
+Installing ruby2_keywords 0.0.5
+Fetching optparse 0.6.0
+Installing optparse 0.6.0
+Fetching activesupport 7.0.8.7
+Installing activesupport 7.0.8.7
+Fetching aws-sdk-s3 1.199.0
+Installing aws-sdk-s3 1.199.0
+Bundle updated!
+/usr/local/lib/ruby/gems/3.3.0/gems/highline-2.0.3/lib/highline/import.rb:10: warning: abbrev was loaded from the standard library, but will no longer be part of the default gems starting from Ruby 3.4.0.
+You can add abbrev to your Gemfile or gemspec to silence this warning.
+[13:55:12]: Sending anonymous analytics information
+[13:55:12]: Learn more at https://docs.fastlane.tools/#metrics
+[13:55:12]: No personal or sensitive data is sent.
+[13:55:12]: You can disable this by adding `opt_out_usage` at the top of your Fastfile
+[13:55:12]: ------------------------------
+[13:55:12]: --- Step: default_platform ---
+[13:55:12]: ------------------------------
+[13:55:12]: ------------------------------------------------
+[13:55:12]: Name of the lane 'upload_to_app_store' is already taken by the action named 'upload_to_app_store'
+[13:55:12]: ------------------------------------------------
+[13:55:12]: Driving the lane 'ios build_release' 🚀
+[13:55:12]: -----------------------------------------
+[13:55:12]: --- Step: set_build_number_repository ---
+[13:55:12]: -----------------------------------------
+[13:55:12]: $ svn info
+[13:55:12]: $ git svn info
+[13:55:12]: ▸ git: 'svn' is not a git command. See 'git --help'.
+[13:55:12]: ▸ The most similar commands are
+[13:55:12]: ▸ fsck
+[13:55:12]: ▸ mv
+[13:55:12]: ▸ show
+[13:55:12]: $ git rev-parse HEAD
+[13:55:12]: ▸ 5ab890a0d879b0af0b15c7f6e6cf9f06abc0b008
+[13:55:12]: Detected repo: git
+[13:55:12]: $ git rev-parse --short HEAD
+[13:55:12]: ▸ 5ab890a
+Current version of project taroApp is: 
+    1
+
+/Users/runner/work/taroApp/taroApp/ios
+[13:55:13]: $ cd /Users/runner/work/taroApp/taroApp/ios && agvtool new-version -all 5ab890a && cd -
+[13:55:14]: ▸ Setting version of project taroApp to:
+[13:55:14]: ▸ 5ab890a.
+[13:55:14]: ▸ Also setting CFBundleVersion key (assuming it exists)
+[13:55:14]: ▸ Updating CFBundleVersion in Info.plist(s)...
+[13:55:14]: ▸ Updated CFBundleVersion in "taroApp.xcodeproj/../taroApp/Info.plist" to 5ab890a
+[13:55:14]: ▸ Updated CFBundleVersion in "taroApp.xcodeproj/../taroAppTests/Info.plist" to 5ab890a
+[13:55:14]: ▸ /Users/runner/work/taroApp/taroApp/ios
+[13:55:14]: -----------------------
+[13:55:14]: --- Step: cocoapods ---
+[13:55:14]: -----------------------
+[13:55:14]: $ bundle exec pod install
+[13:55:14]: ▸ bundler: failed to load command: pod (/usr/local/lib/ruby/gems/3.3.0/bin/pod)
+[13:55:14]: ▸ /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:12:in `<module:LoggerThreadSafeLevel>': uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger (NameError)
+[13:55:14]: ▸ Logger::Severity.constants.each do |severity|
+[13:55:14]: ▸ ^^^^^^
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:9:in `<module:ActiveSupport>'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:8:in `<top (required)>'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_silence.rb:5:in `<top (required)>'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger.rb:3:in `<top (required)>'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support.rb:29:in `<top (required)>'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/lib/cocoapods.rb:7:in `<top (required)>'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/bin/pod:36:in `<top (required)>'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/bin/pod:25:in `<top (required)>'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `load'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `kernel_load'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:23:in `run'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:451:in `exec'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor.rb:538:in `dispatch'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:35:in `dispatch'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:29:in `start'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:28:in `block in <top (required)>'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/friendly_errors.rb:118:in `with_friendly_errors'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:20:in `<top (required)>'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+[13:55:14]: ▸ from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+[13:55:14]: ▸ from /usr/local/lib/ruby/gems/3.3.0/bin/bundle:25:in `<main>'
+[13:55:14]: Exit status of command 'bundle exec pod install' was 1 instead of 0.
+bundler: failed to load command: pod (/usr/local/lib/ruby/gems/3.3.0/bin/pod)
+/usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:12:in `<module:LoggerThreadSafeLevel>': uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger (NameError)
+
+    Logger::Severity.constants.each do |severity|
+    ^^^^^^
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:9:in `<module:ActiveSupport>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:8:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_silence.rb:5:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger.rb:3:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support.rb:29:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/lib/cocoapods.rb:7:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/bin/pod:36:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/pod:25:in `<top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `kernel_load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:23:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:451:in `exec'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor.rb:538:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:35:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:29:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:28:in `block in <top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/friendly_errors.rb:118:in `with_friendly_errors'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:20:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/bundle:25:in `<main>'
+
+[13:55:14]: ❌ iOS构建流程 build_release 失败: bundler: failed to load command: pod (/usr/local/lib/ruby/gems/3.3.0/bin/pod)
+/usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:12:in `<module:LoggerThreadSafeLevel>': uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger (NameError)
+
+    Logger::Severity.constants.each do |severity|
+    ^^^^^^
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:9:in `<module:ActiveSupport>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:8:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_silence.rb:5:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger.rb:3:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support.rb:29:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/lib/cocoapods.rb:7:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/bin/pod:36:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/pod:25:in `<top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `kernel_load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:23:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:451:in `exec'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor.rb:538:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:35:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:29:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:28:in `block in <top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/friendly_errors.rb:118:in `with_friendly_errors'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:20:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/bundle:25:in `<main>'
+
++---------------------------------------------+
+|                Lane Context                 |
++-------------------------+-------------------+
+| DEFAULT_PLATFORM        | ios               |
+| PLATFORM_NAME           | ios               |
+| LANE_NAME               | ios build_release |
+| BUILD_NUMBER_REPOSITORY | 5ab890a           |
+| BUILD_NUMBER            | 5ab890a           |
++-------------------------+-------------------+
+[13:55:14]: Called from Fastfile at line 23
+[13:55:14]: ```
+[13:55:14]:     21:	    set_build_number_repository
+[13:55:14]:     22:	    # 确保项目使用最新的依赖
+[13:55:14]:  => 23:	    cocoapods
+[13:55:14]:     24:	  end
+[13:55:14]:     25:	
+[13:55:14]: ```
+[13:55:14]: bundler: failed to load command: pod (/usr/local/lib/ruby/gems/3.3.0/bin/pod)
+/usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:12:in `<module:LoggerThreadSafeLevel>': uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger (NameError)
+
+    Logger::Severity.constants.each do |severity|
+    ^^^^^^
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:9:in `<module:ActiveSupport>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:8:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_silence.rb:5:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger.rb:3:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support.rb:29:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/lib/cocoapods.rb:7:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/bin/pod:36:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/pod:25:in `<top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `kernel_load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:23:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:451:in `exec'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor.rb:538:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:35:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:29:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:28:in `block in <top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/friendly_errors.rb:118:in `with_friendly_errors'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:20:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/bundle:25:in `<main>'
 
 
++--------------------------------------------------+
+|                 fastlane summary                 |
++------+-----------------------------+-------------+
+| Step | Action                      | Time (in s) |
++------+-----------------------------+-------------+
+| 1    | default_platform            | 0           |
+| 2    | set_build_number_repository | 1           |
+| 💥   | cocoapods                   | 0           |
++------+-----------------------------+-------------+
 
+[13:55:14]: fastlane finished with errors
+
+Looking for related GitHub issues on fastlane/fastlane...
+
+bundler: failed to load command: fastlane (/usr/local/lib/ruby/gems/3.3.0/bin/fastlane)
+/usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/interface.rb:153:in `shell_error!': [!] bundler: failed to load command: pod (/usr/local/lib/ruby/gems/3.3.0/bin/pod) (FastlaneCore::Interface::FastlaneShellError)
+/usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:12:in `<module:LoggerThreadSafeLevel>': uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger (NameError)
+
+    Logger::Severity.constants.each do |severity|
+    ^^^^^^
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:9:in `<module:ActiveSupport>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_thread_safe_level.rb:8:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger_silence.rb:5:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support/logger.rb:3:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/activesupport-7.0.8.7/lib/active_support.rb:29:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/lib/cocoapods.rb:7:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `require'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/bundled_gems.rb:69:in `block (2 levels) in replace_require'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/cocoapods-1.16.2/bin/pod:36:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/pod:25:in `<top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `kernel_load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:23:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:451:in `exec'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor.rb:538:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:35:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:29:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:28:in `block in <top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/friendly_errors.rb:118:in `with_friendly_errors'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:20:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/bundle:25:in `<main>'
+
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/ui.rb:17:in `method_missing'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/cocoapods.rb:62:in `call_error_callback'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/cocoapods.rb:38:in `block in run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/helper/sh_helper.rb:78:in `sh_control_output'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/helper/sh_helper.rb:12:in `sh'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/cocoapods.rb:31:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:263:in `block (2 levels) in execute_action'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/actions_helper.rb:69:in `execute_action'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `chdir'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'
+	from Fastfile:23:in `block (2 levels) in parsing_binding'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:291:in `execute_flow_block'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:46:in `block in execute'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `execute'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:363:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/fastlane-2.228.0/bin/fastlane:23:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/fastlane:25:in `<top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:59:in `kernel_load'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli/exec.rb:23:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:451:in `exec'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor.rb:538:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:35:in `dispatch'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/cli.rb:29:in `start'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:28:in `block in <top (required)>'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/lib/bundler/friendly_errors.rb:118:in `with_friendly_errors'
+	from /usr/local/lib/ruby/gems/3.3.0/gems/bundler-2.7.1/exe/bundle:20:in `<top (required)>'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `load'
+	from /usr/local/Cellar/ruby@3.3/3.3.9/lib/ruby/3.3.0/rubygems.rb:319:in `activate_and_load_bin_path'
+	from /usr/local/lib/ruby/gems/3.3.0/bin/bundle:25:in `<main>'
+Error: Process completed with exit code 1.
