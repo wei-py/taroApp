@@ -3,8 +3,10 @@ name: Build & Upload iOS App
 # 可手动触发，也可自动触发（如 push 到 main）
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+    tags: [ v* ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 
