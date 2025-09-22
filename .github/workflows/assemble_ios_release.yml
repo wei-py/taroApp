@@ -69,56 +69,189 @@ jobs:
           ruby-version: 3.3.0
           bundler-cache: true
 
-      # ✅ 新增：设置代码签名证书和 Provisioning Profile
+      # ✅ 改进的代码签名设置
       - name: Setup iOS Code Signing
         if: ${{ env.SIGNING_CERTIFICATE_P12_DATA != '' && env.PROVISIONING_PROFILE_DATA != '' }}
         run: |
           # 创建临时目录
           mkdir -p ~/certs
           
+          # 验证环境变量
+          echo "🔍 Checking certificate data..."
+          if [ -z "$SIGNING_CERTIFICATE_P12_DATA" ]; then
+            echo "❌ SIGNING_CERTIFICATE_P12_DATA is empty"
+            exit 1
+          fi
+          
+          if [ -z "$SIGNING_CERTIFICATE_PASSWORD" ]; then
+            echo "❌ SIGNING_CERTIFICATE_PASSWORD is empty"
+            exit 1
+          fi
+          
           # 解码并写入证书
+          echo "📝 Decoding certificate..."
           echo "$SIGNING_CERTIFICATE_P12_DATA" | base64 --decode > ~/certs/cert.p12
           
+          # 验证证书文件
+          echo "🔍 Verifying certificate file..."
+          if [ ! -f ~/certs/cert.p12 ]; then
+            echo "❌ Certificate file was not created"
+            exit 1
+          fi
+          
+          file_size=$(stat -f%z ~/certs/cert.p12)
+          echo "📊 Certificate file size: $file_size bytes"
+          
+          if [ $file_size -eq 0 ]; then
+            echo "❌ Certificate file is empty"
+            exit 1
+          fi
+          
           # 解码并写入 Provisioning Profile
+          echo "📝 Decoding provisioning profile..."
           echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > ~/certs/profile.mobileprovision
           
           # 创建临时钥匙串
+          echo "🔐 Creating temporary keychain..."
           security create-keychain -p "" build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "" build.keychain
           security set-keychain-settings -t 3600 -u build.keychain
           
-          # 导入证书到钥匙串
-          security import ~/certs/cert.p12 -k build.keychain -P "$SIGNING_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          # 尝试导入证书到钥匙串
+          echo "📥 Importing certificate to keychain..."
+          if ! security import ~/certs/cert.p12 -k build.keychain -P "$SIGNING_CERTIFICATE_PASSWORD" -T /usr/bin/codesign; then
+            echo "❌ Failed to import certificate. Possible causes:"
+            echo "   1. Wrong password for the .p12 file"
+            echo "   2. Corrupted certificate data"
+            echo "   3. Invalid Base64 encoding"
+            exit 1
+          fi
+          
           security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
           
           # 安装 Provisioning Profile
+          echo "📱 Installing provisioning profile..."
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp ~/certs/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          
+          echo "✅ Code signing setup completed successfully"
 
       - name: Install CocoaPods Dependencies
         working-directory: ./ios
         run: |
           pod install --repo-update
 
-      - name: Build iOS App with Fastlane
+      # ✅ 添加详细的构建前检查
+      - name: Pre-build Checks
         working-directory: ./ios
         run: |
-          bundle exec fastlane build_app
+          echo "🔍 Pre-build environment checks..."
+          echo "📱 Available schemes:"
+          xcodebuild -list -workspace taroApp.xcworkspace
+          echo ""
+          echo "🔐 Available code signing identities:"
+          security find-identity -v -p codesigning
+          echo ""
+          echo "📋 Available provisioning profiles:"
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || echo "No provisioning profiles found"
+          echo ""
+          echo "🎯 Build configuration:"
+          echo "  APP_ID: $APP_ID"
+          echo "  APP_NAME: $APP_NAME"
+          echo "  VERSION_NUMBER: $VERSION_NUMBER"
+          echo "  BUILD_NUMBER: $BUILD_NUMBER"
+          echo "  BUILD_TYPE: $BUILD_TYPE"
+          echo "  TEAM_ID: $TEAM_ID"
+          echo "  CODE_SIGN_IDENTITY: $CODE_SIGN_IDENTITY"
+          echo "  PROVISIONING_PROFILE_SPECIFIER: $PROVISIONING_PROFILE_SPECIFIER"
+
+      # ✅ 修改构建步骤，增加详细日志
+      - name: Build iOS App with Fastlane (Verbose)
+        working-directory: ./ios
+        run: |
+          echo "🚀 Starting iOS build with detailed logging..."
+          # 设置详细日志输出
+          export FASTLANE_VERBOSE=1
+          export FASTLANE_HIDE_GITHUB_ISSUES=1
+          export FASTLANE_SKIP_UPDATE_CHECK=1
+          
+          # 运行 fastlane 构建
+          bundle exec fastlane build_app --verbose
+        continue-on-error: true
+
+      # ✅ 如果构建失败，尝试获取详细日志
+      - name: Capture Build Logs on Failure
+        if: failure()
+        run: |
+          echo "❌ Build failed. Capturing detailed logs..."
+          echo ""
+          echo "📋 Gym logs:"
+          find ~/Library/Logs -name "*taroApp*" -type f 2>/dev/null | head -5 | while read logfile; do
+            echo "=== $logfile ==="
+            tail -100 "$logfile" 2>/dev/null || echo "Could not read $logfile"
+            echo ""
+          done
+          
+          echo "📋 Xcode build logs:"
+          find ~/Library/Developer/Xcode/DerivedData -name "*.log" -type f 2>/dev/null | head -3 | while read logfile; do
+            echo "=== $logfile ==="
+            tail -50 "$logfile" 2>/dev/null || echo "Could not read $logfile"
+            echo ""
+          done
+          
+          echo "📋 Recent system logs related to Xcode:"
+          log show --predicate 'process == "xcodebuild"' --info --last 10m 2>/dev/null | tail -50 || echo "Could not get system logs"
+
+      # ✅ 尝试直接使用 xcodebuild 构建（如果 fastlane 失败）
+      - name: Fallback - Direct xcodebuild
+        if: failure()
+        working-directory: ./ios
+        run: |
+          echo "🔄 Attempting direct xcodebuild as fallback..."
+          
+          # 清理之前的构建
+          xcodebuild clean -workspace taroApp.xcworkspace -scheme taroApp
+          
+          # 尝试构建
+          xcodebuild \
+            -workspace taroApp.xcworkspace \
+            -scheme taroApp \
+            -configuration Release \
+            -destination generic/platform=iOS \
+            -archivePath taroApp.xcarchive \
+            archive \
+            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
+            PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_SPECIFIER" \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            PRODUCT_BUNDLE_IDENTIFIER="$APP_ID" \
+            -verbose
 
       - name: Upload to TestFlight (if AppStore build)
-        if: ${{ env.BUILD_TYPE == 'AppStore' }}
+        if: ${{ env.BUILD_TYPE == 'AppStore' && success() }}
         working-directory: ./ios
         run: |
           bundle exec fastlane upload_to_testflight
 
       - name: Upload Artifact (IPA)
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP_NAME }}-${{ env.BUILD_TYPE }}-${{ env.VERSION_NUMBER }}-${{ env.BUILD_NUMBER }}
           path: ios/*.ipa
 
-      # ✅ 新增：清理钥匙串
+      # ✅ 上传构建日志作为 artifact
+      - name: Upload Build Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ github.run_number }}
+          path: |
+            ~/Library/Logs/gym/*.log
+            ~/Library/Developer/Xcode/DerivedData/**/Logs/**/*.log
+          if-no-files-found: ignore
+
+      # ✅ 清理钥匙串
       - name: Cleanup
         if: always()
         run: |
