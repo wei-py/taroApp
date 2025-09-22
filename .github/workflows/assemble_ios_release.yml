@@ -24,9 +24,13 @@ env:
   SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
   PROVISIONING_PROFILE_DATA: ${{ secrets.PROVISIONING_PROFILE_DATA }}
 
-  # ✅ App Store Connect
+  # ✅ App Store Connect - API Key方式（推荐）
+  APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+  
+  # ✅ App Store Connect - 用户名方式（备用）
   APP_STORE_CONNECT_USERNAME: ${{ secrets.APP_STORE_CONNECT_USERNAME }}
-  APP_STORE_CONNECT_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
 
 jobs:
   build-ios:
@@ -68,6 +72,14 @@ jobs:
         with:
           ruby-version: 3.3.0
           bundler-cache: true
+
+      # ✅ 设置 App Store Connect API Key
+      - name: Setup App Store Connect API Key
+        if: ${{ env.APP_STORE_CONNECT_API_KEY_CONTENT != '' }}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 --decode > ~/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8
+          echo "APP_STORE_CONNECT_API_KEY_PATH=~/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8" >> $GITHUB_ENV
 
       # ✅ 改进的代码签名设置
       - name: Setup iOS Code Signing
@@ -224,9 +236,10 @@ jobs:
             ~/Library/Developer/Xcode/DerivedData/**/Logs/**/*.log
           if-no-files-found: ignore
 
-      # ✅ 清理钥匙串
+      # ✅ 清理钥匙串和临时文件
       - name: Cleanup
         if: always()
         run: |
           security delete-keychain build.keychain || true
           rm -rf ~/certs || true
+          rm -rf ~/private_keys || true

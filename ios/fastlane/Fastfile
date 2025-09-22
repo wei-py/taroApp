@@ -60,24 +60,38 @@ platform :ios do
 
   desc "上传到 TestFlight"
   lane :testflight_upload do
-    # 确保有必要的认证信息
+    # 检查是否有API Key配置（推荐方式）
+    api_key_path = ENV["APP_STORE_CONNECT_API_KEY_PATH"]
+    api_key_id = ENV["APP_STORE_CONNECT_API_KEY_ID"]
+    api_issuer_id = ENV["APP_STORE_CONNECT_ISSUER_ID"]
+    
+    # 检查是否有用户名配置（备用方式）
     username = ENV["APP_STORE_CONNECT_USERNAME"]
-    password = ENV["APP_STORE_CONNECT_PASSWORD"]
     
-    if username.nil? || username.empty?
-      UI.user_error!("APP_STORE_CONNECT_USERNAME environment variable is required")
+    if api_key_path && api_key_id && api_issuer_id
+      # 使用 API Key 方式（推荐）
+      UI.message("Using App Store Connect API Key for authentication")
+      pilot(
+        api_key_path: api_key_path,
+        skip_waiting_for_build_processing: true,
+        skip_submission: true
+      )
+    elsif username
+      # 使用用户名方式（需要应用专用密码）
+      UI.message("Using username/password for authentication")
+      pilot(
+        username: username,
+        skip_waiting_for_build_processing: true,
+        skip_submission: true
+      )
+    else
+      # 尝试使用默认认证
+      UI.message("Using default authentication method")
+      pilot(
+        skip_waiting_for_build_processing: true,
+        skip_submission: true
+      )
     end
-    
-    if password.nil? || password.empty?
-      UI.user_error!("APP_STORE_CONNECT_PASSWORD environment variable is required")
-    end
-    
-    pilot(
-      username: username,
-      password: password,
-      skip_waiting_for_build_processing: true,
-      skip_submission: true
-    )
   end
 
   private_lane :export_method_for do |build_type|
