@@ -166,7 +166,7 @@ jobs:
           echo "  CODE_SIGN_IDENTITY: $CODE_SIGN_IDENTITY"
           echo "  PROVISIONING_PROFILE_SPECIFIER: $PROVISIONING_PROFILE_SPECIFIER"
 
-      # ✅ 修改构建步骤，增加详细日志
+      # ✅ 修改构建步骤，使用新的 lane 名称
       - name: Build iOS App with Fastlane (Verbose)
         working-directory: ./ios
         run: |
@@ -176,8 +176,8 @@ jobs:
           export FASTLANE_HIDE_GITHUB_ISSUES=1
           export FASTLANE_SKIP_UPDATE_CHECK=1
           
-          # 运行 fastlane 构建
-          bundle exec fastlane build_app --verbose
+          # 运行 fastlane 构建（使用新的 lane 名称）
+          bundle exec fastlane build_ios_app --verbose
         continue-on-error: true
 
       # ✅ 如果构建失败，尝试获取详细日志
@@ -199,39 +199,12 @@ jobs:
             tail -50 "$logfile" 2>/dev/null || echo "Could not read $logfile"
             echo ""
           done
-          
-          echo "📋 Recent system logs related to Xcode:"
-          log show --predicate 'process == "xcodebuild"' --info --last 10m 2>/dev/null | tail -50 || echo "Could not get system logs"
-
-      # ✅ 尝试直接使用 xcodebuild 构建（如果 fastlane 失败）
-      - name: Fallback - Direct xcodebuild
-        if: failure()
-        working-directory: ./ios
-        run: |
-          echo "🔄 Attempting direct xcodebuild as fallback..."
-          
-          # 清理之前的构建
-          xcodebuild clean -workspace taroApp.xcworkspace -scheme taroApp
-          
-          # 尝试构建
-          xcodebuild \
-            -workspace taroApp.xcworkspace \
-            -scheme taroApp \
-            -configuration Release \
-            -destination generic/platform=iOS \
-            -archivePath taroApp.xcarchive \
-            archive \
-            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
-            PROVISIONING_PROFILE_SPECIFIER="$PROVISIONING_PROFILE_SPECIFIER" \
-            DEVELOPMENT_TEAM="$TEAM_ID" \
-            PRODUCT_BUNDLE_IDENTIFIER="$APP_ID" \
-            -verbose
 
       - name: Upload to TestFlight (if AppStore build)
         if: ${{ env.BUILD_TYPE == 'AppStore' && success() }}
         working-directory: ./ios
         run: |
-          bundle exec fastlane upload_to_testflight
+          bundle exec fastlane upload_testflight
 
       - name: Upload Artifact (IPA)
         if: success()

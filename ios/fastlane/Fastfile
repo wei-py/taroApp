@@ -2,7 +2,7 @@ default_platform(:ios)
 
 platform :ios do
   desc "构建并导出 iOS App"
-  lane :build_app do |options|
+  lane :build_ios_app do |options|
     # 从环境变量或参数读取
     app_identifier = ENV["APP_ID"] || options[:app_identifier]
     app_name = ENV["APP_NAME"] || options[:app_name]
@@ -14,7 +14,6 @@ platform :ios do
     provisioning_profile_specifier = ENV["PROVISIONING_PROFILE_SPECIFIER"]
     code_sign_identity = ENV["CODE_SIGN_IDENTITY"]
 
-    # ✅ 修复项目名称：traoApp -> taroApp
     # 修改 Bundle Identifier
     update_app_identifier(
       xcodeproj: "taroApp.xcodeproj",
@@ -41,9 +40,8 @@ platform :ios do
       build_number: build_number
     )
 
-    # ✅ 简化代码签名处理（证书已在 GitHub Actions 中安装）
-    # 构建并导出
-    build_app(
+    # 使用 gym 来构建和导出（避免和 lane 名称冲突）
+    gym(
       workspace: "taroApp.xcworkspace",
       scheme: "taroApp",
       export_method: export_method_for(build_type),
@@ -61,8 +59,8 @@ platform :ios do
   end
 
   desc "上传到 TestFlight"
-  lane :upload_to_testflight do
-    upload_to_testflight(
+  lane :upload_testflight do
+    pilot(
       skip_waiting_for_build_processing: true,
       skip_submission: true
     )
