@@ -73,20 +73,33 @@ jobs:
           ruby-version: 3.3.0
           bundler-cache: true
 
-      # ✅ 设置 App Store Connect API Key
+      # ✅ 设置 App Store Connect API Key（修复路径问题）
       - name: Setup App Store Connect API Key
         if: ${{ env.APP_STORE_CONNECT_API_KEY_CONTENT != '' }}
         run: |
-          mkdir -p ~/private_keys
-          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 --decode > ~/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8
-          echo "APP_STORE_CONNECT_API_KEY_PATH=~/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8" >> $GITHUB_ENV
+          # 使用绝对路径而不是 ~ 符号
+          mkdir -p $HOME/private_keys
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 --decode > $HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8
+          
+          # 验证文件是否创建成功
+          if [ -f "$HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8" ]; then
+            echo "✅ API Key file created successfully"
+            echo "📁 File path: $HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8"
+            echo "📊 File size: $(stat -f%z $HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8) bytes"
+            
+            # 设置环境变量
+            echo "APP_STORE_CONNECT_API_KEY_PATH=$HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8" >> $GITHUB_ENV
+          else
+            echo "❌ Failed to create API Key file"
+            exit 1
+          fi
 
       # ✅ 改进的代码签名设置
       - name: Setup iOS Code Signing
         if: ${{ env.SIGNING_CERTIFICATE_P12_DATA != '' && env.PROVISIONING_PROFILE_DATA != '' }}
         run: |
           # 创建临时目录
-          mkdir -p ~/certs
+          mkdir -p $HOME/certs
           
           # 验证环境变量
           echo "🔍 Checking certificate data..."
@@ -102,16 +115,16 @@ jobs:
           
           # 解码并写入证书
           echo "📝 Decoding certificate..."
-          echo "$SIGNING_CERTIFICATE_P12_DATA" | base64 --decode > ~/certs/cert.p12
+          echo "$SIGNING_CERTIFICATE_P12_DATA" | base64 --decode > $HOME/certs/cert.p12
           
           # 验证证书文件
           echo "🔍 Verifying certificate file..."
-          if [ ! -f ~/certs/cert.p12 ]; then
+          if [ ! -f "$HOME/certs/cert.p12" ]; then
             echo "❌ Certificate file was not created"
             exit 1
           fi
           
-          file_size=$(stat -f%z ~/certs/cert.p12)
+          file_size=$(stat -f%z $HOME/certs/cert.p12)
           echo "📊 Certificate file size: $file_size bytes"
           
           if [ $file_size -eq 0 ]; then
@@ -121,7 +134,7 @@ jobs:
           
           # 解码并写入 Provisioning Profile
           echo "📝 Decoding provisioning profile..."
-          echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > ~/certs/profile.mobileprovision
+          echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > $HOME/certs/profile.mobileprovision
           
           # 创建临时钥匙串
           echo "🔐 Creating temporary keychain..."
@@ -132,7 +145,7 @@ jobs:
           
           # 尝试导入证书到钥匙串
           echo "📥 Importing certificate to keychain..."
-          if ! security import ~/certs/cert.p12 -k build.keychain -P "$SIGNING_CERTIFICATE_PASSWORD" -T /usr/bin/codesign; then
+          if ! security import $HOME/certs/cert.p12 -k build.keychain -P "$SIGNING_CERTIFICATE_PASSWORD" -T /usr/bin/codesign; then
             echo "❌ Failed to import certificate. Possible causes:"
             echo "   1. Wrong password for the .p12 file"
             echo "   2. Corrupted certificate data"
@@ -144,8 +157,8 @@ jobs:
           
           # 安装 Provisioning Profile
           echo "📱 Installing provisioning profile..."
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp ~/certs/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp $HOME/certs/profile.mobileprovision "$HOME/Library/MobileDevice/Provisioning Profiles/"
           
           echo "✅ Code signing setup completed successfully"
 
@@ -166,7 +179,7 @@ jobs:
           security find-identity -v -p codesigning
           echo ""
           echo "📋 Available provisioning profiles:"
-          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || echo "No provisioning profiles found"
+          ls -la "$HOME/Library/MobileDevice/Provisioning Profiles/" || echo "No provisioning profiles found"
           echo ""
           echo "🎯 Build configuration:"
           echo "  APP_ID: $APP_ID"
@@ -177,6 +190,19 @@ jobs:
           echo "  TEAM_ID: $TEAM_ID"
           echo "  CODE_SIGN_IDENTITY: $CODE_SIGN_IDENTITY"
           echo "  PROVISIONING_PROFILE_SPECIFIER: $PROVISIONING_PROFILE_SPECIFIER"
+          
+          # 检查API Key文件
+          if [ -n "$APP_STORE_CONNECT_API_KEY_PATH" ]; then
+            echo "🔑 API Key configuration:"
+            echo "  API_KEY_PATH: $APP_STORE_CONNECT_API_KEY_PATH"
+            echo "  API_KEY_ID: $APP_STORE_CONNECT_API_KEY_ID"
+            echo "  ISSUER_ID: $APP_STORE_CONNECT_ISSUER_ID"
+            if [ -f "$APP_STORE_CONNECT_API_KEY_PATH" ]; then
+              echo "  ✅ API Key file exists"
+            else
+              echo "  ❌ API Key file not found"
+            fi
+          fi
 
       # ✅ 修改构建步骤，使用新的 lane 名称
       - name: Build iOS App with Fastlane (Verbose)
@@ -199,14 +225,14 @@ jobs:
           echo "❌ Build failed. Capturing detailed logs..."
           echo ""
           echo "📋 Gym logs:"
-          find ~/Library/Logs -name "*taroApp*" -type f 2>/dev/null | head -5 | while read logfile; do
+          find $HOME/Library/Logs -name "*taroApp*" -type f 2>/dev/null | head -5 | while read logfile; do
             echo "=== $logfile ==="
             tail -100 "$logfile" 2>/dev/null || echo "Could not read $logfile"
             echo ""
           done
           
           echo "📋 Xcode build logs:"
-          find ~/Library/Developer/Xcode/DerivedData -name "*.log" -type f 2>/dev/null | head -3 | while read logfile; do
+          find $HOME/Library/Developer/Xcode/DerivedData -name "*.log" -type f 2>/dev/null | head -3 | while read logfile; do
             echo "=== $logfile ==="
             tail -50 "$logfile" 2>/dev/null || echo "Could not read $logfile"
             echo ""
@@ -232,8 +258,8 @@ jobs:
         with:
           name: build-logs-${{ github.run_number }}
           path: |
-            ~/Library/Logs/gym/*.log
-            ~/Library/Developer/Xcode/DerivedData/**/Logs/**/*.log
+            $HOME/Library/Logs/gym/*.log
+            $HOME/Library/Developer/Xcode/DerivedData/**/Logs/**/*.log
           if-no-files-found: ignore
 
       # ✅ 清理钥匙串和临时文件
@@ -241,5 +267,5 @@ jobs:
         if: always()
         run: |
           security delete-keychain build.keychain || true
-          rm -rf ~/certs || true
-          rm -rf ~/private_keys || true
+          rm -rf $HOME/certs || true
+          rm -rf $HOME/private_keys || true
