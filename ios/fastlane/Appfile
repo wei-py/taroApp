@@ -1,6 +1,17 @@
-# app_identifier("[[APP_IDENTIFIER]]") # The bundle identifier of your app
-# apple_id("[[APPLE_ID]]") # Your Apple email address
+# 应用标识符
+app_identifier(ENV["APP_ID"] || "com.bto.Light")
 
+# Apple ID (用于 App Store Connect)
+apple_id(ENV["APPLE_ID"] || "your-apple-id@example.com")
+
+# 团队 ID
+team_id(ENV["TEAM_ID"])
+
+# iTunes Connect 团队 ID (如果与开发团队不同)
+itc_team_id(ENV["ITC_TEAM_ID"] || ENV["TEAM_ID"])
+
+# 开发者门户团队 ID
+team_name(ENV["TEAM_NAME"] || "Your Team Name")
 
 # For more information about the Appfile, see:
 #     https://docs.fastlane.tools/advanced/#appfile

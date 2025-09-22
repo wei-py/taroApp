@@ -1,3 +1,4 @@
+# This file contains the fastlane.tools configuration
 # You can find the documentation at https://docs.fastlane.tools
 #
 # For a list of all available actions, check out
@@ -15,169 +16,193 @@
 default_platform(:ios)
 
 platform :ios do
-  # 通用配置
+  # 环境变量配置
+  APP_ID = ENV["APP_ID"] || "com.bto.Light"
+  APP_NAME = ENV["APP_NAME"] || "BTOLIGHT"
+  VERSION_NUMBER = ENV["VERSION_NUMBER"] || "2.9.0"
+  BUILD_NUMBER = ENV["BUILD_NUMBER"] || Time.now.strftime("%Y%m%d%H%M")
+  BUILD_TYPE = ENV["BUILD_TYPE"] || "AppStore"
+  TEAM_ID = ENV["TEAM_ID"]
+  PROVISIONING_PROFILE_SPECIFIER = ENV["PROVISIONING_PROFILE_SPECIFIER"] || "BTOLIGHT"
+  CODE_SIGN_IDENTITY = ENV["CODE_SIGN_IDENTITY"] || "Apple Distribution"
+  
+  # App Store Connect API 配置
+  API_KEY_ID = ENV["APP_STORE_CONNECT_API_KEY_ID"]
+  ISSUER_ID = ENV["APP_STORE_CONNECT_ISSUER_ID"]
+  
   before_all do
-    # 设置构建日志详细程度
-    set_build_number_repository
-    # 注释掉 cocoapods，因为 GitHub Actions 工作流中已经单独执行了 pod install
-    # cocoapods
+    # 确保工作目录正确
+    ensure_git_status_clean unless ENV["SKIP_GIT_CHECK"]
+    
+    # 设置 App Store Connect API Key
+    if API_KEY_ID && ISSUER_ID
+      app_store_connect_api_key(
+        key_id: API_KEY_ID,
+        issuer_id: ISSUER_ID,
+        key_filepath: "~/.appstoreconnect/private_keys/AuthKey_#{API_KEY_ID}.p8",
+        duration: 1200,
+        in_house: false
+      )
+    end
   end
 
-  # 更新 Info.plist 文件
-  def update_info_plist
-    update_info_plist(
-      plist_path: "taroApp/Info.plist",
-      app_identifier: ENV["FL_APP_IDENTIFIER"] || ENV["APP_ID"] || "com.bto.Light",
-      display_name: ENV["FL_UPDATE_PLIST_DISPLAY_NAME"] || ENV["APP_NAME"] || "BTOLIGHT",
-      version_number: ENV["FL_VERSION_NUMBER_VERSION_NUMBER"] || ENV["VERSION_NUMBER"] || "2.9.0",
-      build_number: ENV["FL_BUILD_NUMBER_BUILD_NUMBER"] || ENV["BUILD_NUMBER"] || Time.now.strftime("%Y%m%d%H%M")
-    )
+  desc "构建并上传到 App Store Connect"
+  lane :release do
+    # 更新版本号和构建号
+    update_version_and_build_number
+    
+    # 构建应用
+    build_app_for_release
+    
+    # 上传到 App Store Connect
+    upload_to_app_store_connect
+    
+    # 发送通知
+    send_notification("✅ iOS 应用已成功构建并上传到 App Store Connect")
   end
 
-  # 更新代码签名设置
-  def update_code_signing_settings
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      path: "taroApp.xcodeproj",
-      code_sign_identity: ENV["FL_CODE_SIGN_IDENTITY"] || ENV["CODE_SIGN_IDENTITY"] || "Apple Distribution",
-      team_id: ENV["FASTLANE_TEAM_ID"] || ENV["TEAM_ID"],
-      profile_name: ENV["FL_PROVISIONING_PROFILE_SPECIFIER"] || ENV["PROVISIONING_PROFILE_SPECIFIER"] || "BTOLIGHT"
-    )
+  desc "仅构建应用（不上传）"
+  lane :build_only do
+    update_version_and_build_number
+    build_app_for_release
+    send_notification("✅ iOS 应用构建完成")
   end
 
-  # 开发环境构建
-  desc "构建开发环境的iOS应用"
-  lane :build_dev do |options|
-    update_info_plist
-    update_code_signing_settings
-    increment_version_number(version_number: ENV["FL_VERSION_NUMBER_VERSION_NUMBER"] || "1.0.0")
+  desc "构建测试版本"
+  lane :beta do
+    update_version_and_build_number
+    
+    # 构建 Ad Hoc 版本用于测试
     build_app(
       scheme: "taroApp",
-      workspace: "taroApp.xcworkspace",
-      export_method: "development",
-      configuration: "Debug",
-      clean: true,
-      xcargs: "GCC_PREPROCESSOR_DEFINITIONS='$(inherited) DEBUG=1'",
-      export_options: {
-        method: "development",
-        compileBitcode: false
-      }
-    )
-  end
-
-  # 测试环境构建
-  desc "构建测试环境的iOS应用"
-  lane :build_test do |options|
-    update_info_plist
-    update_code_signing_settings
-    increment_version_number(version_number: ENV["FL_VERSION_NUMBER_VERSION_NUMBER"] || "1.0.0")
-    build_app(
-      scheme: "taroApp",
-      workspace: "taroApp.xcworkspace",
+      configuration: "Release",
       export_method: "ad-hoc",
-      configuration: "Release",
-      clean: true,
       export_options: {
-        method: "ad-hoc",
-        compileBitcode: true
-      }
+        provisioningProfiles: {
+          APP_ID => PROVISIONING_PROFILE_SPECIFIER
+        },
+        signingStyle: "manual",
+        teamID: TEAM_ID
+      },
+      output_directory: "./build",
+      output_name: "#{APP_NAME}_#{VERSION_NUMBER}_#{BUILD_NUMBER}_AdHoc.ipa"
     )
+    
+    send_notification("✅ iOS 测试版本构建完成")
   end
 
-  # 发布环境构建
-  desc "构建发布环境的iOS应用"
-  lane :build_release do |options|
-    update_info_plist
-    update_code_signing_settings
-    increment_version_number(version_number: ENV["FL_VERSION_NUMBER_VERSION_NUMBER"] || "2.9.0")
-    increment_build_number(build_number: ENV["FL_BUILD_NUMBER_BUILD_NUMBER"] || Time.now.strftime("%Y%m%d%H%M"))
+  desc "更新版本号和构建号"
+  private_lane :update_version_and_build_number do
+    # 更新版本号
+    increment_version_number(
+      version_number: VERSION_NUMBER,
+      xcodeproj: "taroApp.xcodeproj"
+    )
+    
+    # 更新构建号
+    increment_build_number(
+      build_number: BUILD_NUMBER,
+      xcodeproj: "taroApp.xcodeproj"
+    )
+    
+    UI.success("版本号已更新为: #{VERSION_NUMBER}")
+    UI.success("构建号已更新为: #{BUILD_NUMBER}")
+  end
+
+  desc "构建发布版本"
+  private_lane :build_app_for_release do
+    # 清理之前的构建
+    clean_build_artifacts
+    
+    # 构建应用
     build_app(
       scheme: "taroApp",
-      workspace: "taroApp.xcworkspace",
-      export_method: ENV["BUILD_TYPE"] || "app-store",
       configuration: "Release",
-      clean: true,
+      export_method: BUILD_TYPE.downcase,
       export_options: {
-        method: ENV["BUILD_TYPE"] || "app-store",
-        compileBitcode: true,
+        provisioningProfiles: {
+          APP_ID => PROVISIONING_PROFILE_SPECIFIER
+        },
+        signingStyle: "manual",
+        teamID: TEAM_ID,
+        compileBitcode: false,
+        uploadBitcode: false,
+        uploadSymbols: true,
         manageAppVersionAndBuildNumber: false
-      }
+      },
+      output_directory: "./build",
+      output_name: "#{APP_NAME}_#{VERSION_NUMBER}_#{BUILD_NUMBER}.ipa",
+      include_symbols: true,
+      include_bitcode: false
     )
+    
+    UI.success("应用构建完成: #{lane_context[SharedValues::IPA_OUTPUT_PATH]}")
   end
 
-  # 修复方案
-  
-  ### 1. 修改 Fastfile 中的 lane 名称
-  
-  需要修改 Fastfile 中与内置 action 冲突的 lane 名称：
-  ```
-  # 上传到App Store Connect
-  desc "上传应用到App Store Connect"
-  # 将原来的 upload_to_app_store 改为自定义名称，避免冲突
-  lane :publish_to_app_store do |options|
-  # 方式1: 使用API Key (推荐)
-  if ENV["APP_STORE_CONNECT_API_KEY_ID"] && ENV["APP_STORE_CONNECT_ISSUER_ID"] && ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
-  # 保存API Key到临时文件
-  api_key_path = File.join(Dir.tmpdir, "app_store_connect_key.p8")
-  File.open(api_key_path, "w") { |file| file.write(ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]) }
-  
-  # 调用内置的 upload_to_app_store action
-  upload_to_app_store(
-  api_key_path: api_key_path,
-  api_key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-  api_key_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-  ipa: "taroApp.ipa",
-  skip_metadata: true,
-  skip_screenshots: true,
-  submit_for_review: false,
-  automatic_release: false
-  )
-  
-  # 删除临时API Key文件
-  File.delete(api_key_path) if File.exist?(api_key_path)
-  else
-  # 方式2: 使用用户名密码 (备用)
-  upload_to_app_store(
-  ipa: "taroApp.ipa",
-  skip_metadata: true,
-  skip_screenshots: true,
-  submit_for_review: false,
-  automatic_release: false
-  )
-  end
-  end
-  
-  # 完整的发布流程
-  desc "完整的iOS应用发布流程: 构建并上传到App Store Connect"
-  lane :release do |options|
-  build_release
-  # 相应地更新调用名称
-  publish_to_app_store
-  end
-  ```
-
-  # 完整的发布流程
-  desc "完整的iOS应用发布流程: 构建并上传到App Store Connect"
-  lane :release do |options|
-    build_release
-    upload_to_app_store
+  desc "上传到 App Store Connect"
+  private_lane :upload_to_app_store_connect do
+    begin
+      upload_to_app_store(
+        ipa: lane_context[SharedValues::IPA_OUTPUT_PATH],
+        skip_screenshots: true,
+        skip_metadata: true,
+        skip_app_version_update: true,
+        force: true,
+        precheck_include_in_app_purchases: false,
+        submit_for_review: false,
+        automatic_release: false,
+        platform: "ios"
+      )
+      
+      UI.success("应用已成功上传到 App Store Connect")
+    rescue => exception
+      UI.error("上传失败: #{exception.message}")
+      send_notification("❌ iOS 应用上传失败: #{exception.message}")
+      raise exception
+    end
   end
 
-  # 清理缓存
-  lane :clean do
-    sh "rm -rf ./build"
-    sh "xcodebuild clean -workspace taroApp.xcworkspace -scheme taroApp"
+  desc "清理构建产物"
+  private_lane :clean_build_artifacts do
+    # 清理 Xcode 构建缓存
+    clear_derived_data
+    
+    # 清理之前的构建文件
+    sh("rm -rf ../build") if File.exist?("../build")
+    
+    UI.success("构建产物已清理")
   end
 
-  # 后处理
-  after_all do |lane|
-    # 可以在这里添加构建完成后的通知或其他操作
-    puts "✅ iOS构建流程 #{lane} 已完成！"
+  desc "发送通知"
+  private_lane :send_notification do |options|
+    message = options[:message] || options
+    
+    # 可以集成 Slack、钉钉等通知服务
+    UI.important("📱 #{message}")
+    
+    # 如果配置了 Slack Webhook，可以发送到 Slack
+    if ENV["SLACK_WEBHOOK_URL"]
+      slack(
+        message: message,
+        webhook_url: ENV["SLACK_WEBHOOK_URL"],
+        channel: ENV["SLACK_CHANNEL"] || "#ios-builds",
+        username: "Fastlane Bot",
+        icon_emoji: ":rocket:"
+      )
+    end
   end
 
   # 错误处理
   error do |lane, exception|
-    # 可以在这里添加错误通知或日志记录
-    puts "❌ iOS构建流程 #{lane} 失败: #{exception}"
+    UI.error("Lane #{lane} 执行失败")
+    UI.error("错误信息: #{exception.message}")
+    send_notification("❌ Lane #{lane} 执行失败: #{exception.message}")
+  end
+
+  # 执行完成后的清理工作
+  after_all do |lane|
+    # 清理临时文件
+    clean_build_artifacts if ENV["CLEAN_AFTER_BUILD"] == "true"
+    UI.success("Lane #{lane} 执行完成")
   end
 end

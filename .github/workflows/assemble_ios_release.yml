@@ -32,111 +32,88 @@ env:
   APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
 
 jobs:
-  assemble:
-    runs-on: macos-13
+  build-ios:
+    name: Build iOS App
+    runs-on: macos-latest
+    
     steps:
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=timestamp::$(date +'%s')"
-      - name: Checkout Project
-        uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 10
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - run: pnpm install
-      - name: Cache Pods
-        uses: actions/cache@v3
-        with:
-          path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-      - name: Install pods
-        run: cd ios && pod update --no-repo-update
-      - name: Import signing certificate
-        if: env.SIGNING_CERTIFICATE_P12_DATA != ''
-        env:
-          SIGNING_CERTIFICATE_P12_DATA: ${{ env.SIGNING_CERTIFICATE_P12_DATA }}
-          SIGNING_CERTIFICATE_PASSWORD: ${{ env.SIGNING_CERTIFICATE_PASSWORD }}
-        run: |
-          set -euo pipefail
-          security create-keychain -p "" build.keychain
-          security list-keychains -s build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
-          security set-keychain-settings
-          echo $SIGNING_CERTIFICATE_P12_DATA | base64 --decode > signingCertificate.p12
-          security import signingCertificate.p12 \
-                          -f pkcs12 \
-                          -k build.keychain \
-                          -P $SIGNING_CERTIFICATE_PASSWORD \
-                          -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-      - name: Import provisioning profile
-        if: env.PROVISIONING_PROFILE_DATA != ''
-        env:
-          PROVISIONING_PROFILE_DATA: ${{ env.PROVISIONING_PROFILE_DATA }}
-        run: |
-          set -euo pipefail
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
-      - name: Build app
-        env:
-          FL_APP_IDENTIFIER: ${{ env.APP_ID }}
-          FL_UPDATE_PLIST_DISPLAY_NAME: ${{ env.APP_NAME }}
-          FL_UPDATE_PLIST_PATH: taroApp/Info.plist
-          FL_VERSION_NUMBER_VERSION_NUMBER: ${{ env.VERSION_NUMBER }}
-          FL_BUILD_NUMBER_BUILD_NUMBER: ${{ env.BUILD_NUMBER }}.${{steps.date.outputs.timestamp}}
-          FL_CODE_SIGN_IDENTITY: ${{ env.CODE_SIGN_IDENTITY }}
-          FL_PROVISIONING_PROFILE_SPECIFIER: ${{ env.PROVISIONING_PROFILE_SPECIFIER }}
-          FASTLANE_TEAM_ID: ${{ env.TEAM_ID }}
-          NODE_PATH: ${{ github.workspace }}/node_modules/.pnpm/node_modules:$NODE_PATH
-        run: |
-          cd ios
-          bundle update
-          bundle exec fastlane build_release
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
-          working-directory: ios
+    - name: Checkout Repository
+      uses: actions/checkout@v4
       
-      - name: Install gems
-        run: cd ios && bundle install
-      - name: Upload iOS Products
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-${{ env.BUILD_TYPE }}
-          path: |
-            ${{ github.workspace }}/ios/taroApp.ipa
-            ${{ github.workspace }}/ios/taroApp.app.dSYM.zip
-      - name: Upload app to App Store Connect
-        if: env.APP_STORE_CONNECT_API_KEY_ID != '' && env.APP_STORE_CONNECT_ISSUER_ID != '' && env.APP_STORE_CONNECT_API_KEY_CONTENT != ''
-        env:
-          APP_STORE_CONNECT_API_KEY_ID: ${{ env.APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_ISSUER_ID: ${{ env.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ env.APP_STORE_CONNECT_API_KEY_CONTENT }}
-        run:
-          cd ios
-          bundle exec fastlane publish_to_app_store
-      - name: Rename release assets
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          mv ios/taroApp.ipa ios/app-${{ env.BUILD_TYPE }}.ipa
-          mv ios/taroApp.app.dSYM.zip ios/app-${{ env.BUILD_TYPE }}.app.dSYM.zip
-      - name: Upload release assets
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          prerelease: ${{ contains(github.ref, 'beta') }}
-          files: |
-            ios/app-${{ env.BUILD_TYPE }}.ipa
-            ios/app-${{ env.BUILD_TYPE }}.app.dSYM.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0'
+        bundler-cache: true
+        working-directory: ios
+        
+    - name: Install Dependencies
+      run: |
+        npm ci
+        cd ios && bundle install
+        
+    - name: Install CocoaPods Dependencies
+      run: |
+        cd ios
+        pod install --repo-update
+        
+    - name: Build Taro RN Bundle
+      run: |
+        npm run build:rn
+        
+    - name: Setup Keychain
+      run: |
+        security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD || 'temp_password' }}" build.keychain
+        security default-keychain -s build.keychain
+        security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD || 'temp_password' }}" build.keychain
+        security set-keychain-settings -t 3600 -u build.keychain
+        
+    - name: Import Certificate
+      run: |
+        echo "$SIGNING_CERTIFICATE_P12_DATA" | base64 --decode > certificate.p12
+        security import certificate.p12 -k build.keychain -P "$SIGNING_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD || 'temp_password' }}" build.keychain
+        rm certificate.p12
+        
+    - name: Import Provisioning Profile
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+        
+    - name: Setup App Store Connect API Key
+      run: |
+        mkdir -p ~/.appstoreconnect/private_keys
+        echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 --decode > ~/.appstoreconnect/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8
+        
+    - name: Build and Upload to App Store Connect
+      run: |
+        cd ios
+        bundle exec fastlane release
+      env:
+        FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+        FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+        
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ios-build-artifacts
+        path: |
+          ios/build/
+          ios/fastlane/report.xml
+          ios/fastlane/test_output/
+        retention-days: 7
+        
+    - name: Cleanup
+      if: always()
+      run: |
+        security delete-keychain build.keychain || true
+        rm -rf ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision || true
+        rm -rf ~/.appstoreconnect/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8 || true
+
