@@ -60,5 +60,21 @@ target 'taroApp' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+    
+    # 修复Swift版本和优化级别冲突问题
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        # 设置Swift优化级别
+        if config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] == '-Onone'
+          config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-O'
+        end
+        
+        # 确保Swift版本一致性
+        config.build_settings['SWIFT_VERSION'] = '5.0'
+        
+        # 禁用预览功能以避免冲突
+        config.build_settings['ENABLE_PREVIEWS'] = 'NO'
+      end
+    end
   end
 end

@@ -73,8 +73,8 @@ jobs:
       - name: Install CocoaPods Dependencies
         working-directory: ./ios
         run: |
-          rm -rf Pods
-          rm -rf Podfile.lock
+          # rm -rf Pods
+          # rm -rf Podfile.lock
           pod install --repo-update
 
       - name: Build iOS App with Fastlane
