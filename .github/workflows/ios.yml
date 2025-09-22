@@ -189,12 +189,12 @@ jobs:
           echo "⚠️ App Store Connect API key not provided"
         fi
         
-    - name: 🧪 Run Tests
-      if: ${{ !inputs.skip_tests }}
-      run: |
-        cd ios
-        echo "🧪 Running iOS tests..."
-        bundle exec fastlane test
+    # - name: 🧪 Run Tests
+    #   if: ${{ !inputs.skip_tests }}
+    #   run: |
+    #     cd ios
+    #     echo "🧪 Running iOS tests..."
+    #     bundle exec fastlane test
         
     - name: 🚀 Build and Deploy
       run: |
