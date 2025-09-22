@@ -55,27 +55,10 @@ target 'taroApp' do
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
-    # react_native_post_install(
-    #   installer,
-    #   config[:reactNativePath],
-    #   :mac_catalyst_enabled => false
-    # )
-    installer.pods_project.targets.each do |target|
-      if target.platform_name == :ios && target.build_phase_by_name('Compile Sources')
-        target.build_configurations.each do |config|
-          if config.build_settings['SWIFT_VERSION']
-            config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
-          end
-        end
-      end
-    end
-
-    installer.pods_project.targets.each do |target|
-       if target.name == 'ExpoModulesCore' || target.name == 'RCT-Folly' || target.name == 'FBLazyVector'
-         target.build_configurations.each do |config|
-           config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
-         end
-       end
-     end
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false
+    )
   end
 end
