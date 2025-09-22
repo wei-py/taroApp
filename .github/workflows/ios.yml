@@ -1,0 +1,90 @@
+name: iOS CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  # iOS 构建所需的环境变量
+  KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }} # Keychain 密码
+  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # match 密码，用于证书管理
+  # GIT_BASIC_AUTHORIZATION: ${{ secrets.GIT_CREDENTIALS }} # match 私有仓库的访问凭证
+
+  # App Store Connect API 凭证
+  APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }} # API Key ID
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }} # API Key Issuer ID
+  APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }} # API Private Key
+
+  # 应用配置
+  SCHEME: "taroApp" # iOS 项目的 Scheme 名称
+  EXPORT_METHOD: "app-store" # 导出方式
+
+  # Crashlytics 配置（可选）
+  CRASHLYTICS_API_TOKEN: ${{ secrets.CRASHLYTICS_API_TOKEN }} # Crashlytics API Token
+  CRASHLYTICS_BUILD_SECRET: ${{ secrets.CRASHLYTICS_BUILD_SECRET }} # Crashlytics Build Secret
+
+jobs:
+  build_and_release:
+    name: Build and Release iOS App
+    runs-on: macos-latest # 必须使用 macOS 环境
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0 # 根据你的 Gemfile.lock 选择版本
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: |
+          bundle install
+
+      - name: Setup Keychain and Certificates (if using match)
+        run: |
+          mkdir -p ~/Library/Keychains
+          echo $KEYCHAIN_PASSWORD | fastlane run create_keychain \
+            keychain_path:~/Library/Keychains/fastlane.keychain-db \
+            password:$KEYCHAIN_PASSWORD \
+            timeout:3600 \
+            unlock:true \
+            set_default:true
+
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+
+      - name: Download Certificates and Profiles via match
+        run: |
+          fastlane match appstore --readonly --keychain_name fastlane --keychain_password $KEYCHAIN_PASSWORD
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          # GIT_BASIC_AUTHORIZATION: ${{ secrets.GIT_CREDENTIALS }} # if match repo is private
+
+      - name: Build and Upload to TestFlight
+        run: |
+          fastlane beta
+        env:
+          # Apple ID 账号密码（不推荐，建议用 API Key）
+          # FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
+          # FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APP_SPECIFIC_PASSWORD }}
+
+          # 推荐：App Store Connect API Key
+          APP_STORE_CONNECT_API_KEY_ID: ${{ env.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ env.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ env.APP_STORE_CONNECT_API_KEY_CONTENT }}
+
+          # 其他环境变量
+          SCHEME: "taroApp"
+          EXPORT_METHOD: "app-store"
+
+      # - name: Upload dSYM to Crashlytics (可选)
+      #   if: success()
+      #   run: |
+      #     fastlane upload_symbols_to_crashlytics
+      #   env:
+      #     CRASHLYTICS_API_TOKEN: ${{ secrets.CRASHLYTICS_API_TOKEN }}
+      #     CRASHLYTICS_BUILD_SECRET: ${{ secrets.CRASHLYTICS_BUILD_SECRET }}

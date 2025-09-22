@@ -1,208 +1,39 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 platform :ios do
-  # 环境变量配置
-  APP_ID = ENV["APP_ID"] || "com.bto.Light"
-  APP_NAME = ENV["APP_NAME"] || "BTOLIGHT"
-  VERSION_NUMBER = ENV["VERSION_NUMBER"] || "2.9.0"
-  BUILD_NUMBER = ENV["BUILD_NUMBER"] || Time.now.strftime("%Y%m%d%H%M")
-  BUILD_TYPE = ENV["BUILD_TYPE"] || "AppStore"
-  TEAM_ID = ENV["TEAM_ID"]
-  PROVISIONING_PROFILE_SPECIFIER = ENV["PROVISIONING_PROFILE_SPECIFIER"] || "BTOLIGHT"
-  CODE_SIGN_IDENTITY = ENV["CODE_SIGN_IDENTITY"] || "Apple Distribution"
-  
-  # App Store Connect API 配置
-  API_KEY_ID = ENV["APP_STORE_CONNECT_API_KEY_ID"]
-  ISSUER_ID = ENV["APP_STORE_CONNECT_ISSUER_ID"]
-  
-  before_all do
-    # 确保工作目录正确
-    ensure_git_status_clean unless ENV["SKIP_GIT_CHECK"]
-    
-    # 设置 App Store Connect API Key
-    if API_KEY_ID && ISSUER_ID
-      app_store_connect_api_key(
-        key_id: API_KEY_ID,
-        issuer_id: ISSUER_ID,
-        key_filepath: "~/.appstoreconnect/private_keys/AuthKey_#{API_KEY_ID}.p8",
-        duration: 1200,
-        in_house: false
-      )
-    end
-  end
-
-  desc "构建并上传到 App Store Connect"
-  lane :release do
-    # 更新版本号和构建号
-    update_version_and_build_number
-    
-    # 构建应用
-    build_app_for_release
-    
-    # 上传到 App Store Connect
-    upload_to_app_store_connect
-    
-    # 发送通知
-    send_notification("✅ iOS 应用已成功构建并上传到 App Store Connect")
-  end
-
-  desc "仅构建应用（不上传）"
-  lane :build_only do
-    update_version_and_build_number
-    build_app_for_release
-    send_notification("✅ iOS 应用构建完成")
-  end
-
-  desc "构建测试版本"
+  desc "Push a new beta build to TestFlight"
   lane :beta do
-    update_version_and_build_number
-    
-    # 构建 Ad Hoc 版本用于测试
+    # 更新版本号（可选）
+    increment_build_number(xcodeproj: "taroApp.xcodeproj")
+
+    # 编译打包
     build_app(
-      scheme: "taroApp",
-      configuration: "Release",
-      export_method: "ad-hoc",
+      workspace: "taroApp.xcworkspace",
+      scheme: ENV["SCHEME"] || "taroApp",
+      export_method: ENV["EXPORT_METHOD"] || "app-store",
       export_options: {
         provisioningProfiles: {
-          APP_ID => PROVISIONING_PROFILE_SPECIFIER
-        },
-        signingStyle: "manual",
-        teamID: TEAM_ID
-      },
-      output_directory: "./build",
-      output_name: "#{APP_NAME}_#{VERSION_NUMBER}_#{BUILD_NUMBER}_AdHoc.ipa"
+          "com.yourcompany.taroApp" => "match AppStore com.yourcompany.taroApp"
+        }
+      }
     )
-    
-    send_notification("✅ iOS 测试版本构建完成")
-  end
 
-  desc "更新版本号和构建号"
-  private_lane :update_version_and_build_number do
-    # 更新版本号
-    increment_version_number(
-      version_number: VERSION_NUMBER,
-      xcodeproj: "taroApp.xcodeproj"
-    )
-    
-    # 更新构建号
-    increment_build_number(
-      build_number: BUILD_NUMBER,
-      xcodeproj: "taroApp.xcodeproj"
-    )
-    
-    UI.success("版本号已更新为: #{VERSION_NUMBER}")
-    UI.success("构建号已更新为: #{BUILD_NUMBER}")
-  end
-
-  desc "构建发布版本"
-  private_lane :build_app_for_release do
-    # 清理之前的构建
-    clean_build_artifacts
-    
-    # 构建应用
-    build_app(
-      scheme: "taroApp",
-      configuration: "Release",
-      export_method: BUILD_TYPE.downcase,
-      export_options: {
-        provisioningProfiles: {
-          APP_ID => PROVISIONING_PROFILE_SPECIFIER
-        },
-        signingStyle: "manual",
-        teamID: TEAM_ID,
-        compileBitcode: false,
-        uploadBitcode: false,
-        uploadSymbols: true,
-        manageAppVersionAndBuildNumber: false
-      },
-      output_directory: "./build",
-      output_name: "#{APP_NAME}_#{VERSION_NUMBER}_#{BUILD_NUMBER}.ipa",
-      include_symbols: true,
-      include_bitcode: false
-    )
-    
-    UI.success("应用构建完成: #{lane_context[SharedValues::IPA_OUTPUT_PATH]}")
-  end
-
-  desc "上传到 App Store Connect"
-  private_lane :upload_to_app_store_connect do
-    begin
-      upload_to_app_store(
-        ipa: lane_context[SharedValues::IPA_OUTPUT_PATH],
-        skip_screenshots: true,
-        skip_metadata: true,
-        skip_app_version_update: true,
-        force: true,
-        precheck_include_in_app_purchases: false,
-        submit_for_review: false,
-        automatic_release: false,
-        platform: "ios"
+    # 上传到 TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      api_key: app_store_connect_api_key(
+        key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+        issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+        key_content: ENV["APP_STORE_CONNECT_API_KEY_KEY"]
       )
-      
-      UI.success("应用已成功上传到 App Store Connect")
-    rescue => exception
-      UI.error("上传失败: #{exception.message}")
-      send_notification("❌ iOS 应用上传失败: #{exception.message}")
-      raise exception
-    end
+    )
   end
 
-  desc "清理构建产物"
-  private_lane :clean_build_artifacts do
-    # 清理 Xcode 构建缓存
-    clear_derived_data
-    
-    # 清理之前的构建文件
-    sh("rm -rf ../build") if File.exist?("../build")
-    
-    UI.success("构建产物已清理")
-  end
-
-  desc "发送通知"
-  private_lane :send_notification do |options|
-    message = options[:message] || options
-    
-    # 可以集成 Slack、钉钉等通知服务
-    UI.important("📱 #{message}")
-    
-    # 如果配置了 Slack Webhook，可以发送到 Slack
-    if ENV["SLACK_WEBHOOK_URL"]
-      slack(
-        message: message,
-        webhook_url: ENV["SLACK_WEBHOOK_URL"],
-        channel: ENV["SLACK_CHANNEL"] || "#ios-builds",
-        username: "Fastlane Bot",
-        icon_emoji: ":rocket:"
-      )
-    end
-  end
-
-  # 错误处理
-  error do |lane, exception|
-    UI.error("Lane #{lane} 执行失败")
-    UI.error("错误信息: #{exception.message}")
-    send_notification("❌ Lane #{lane} 执行失败: #{exception.message}")
-  end
-
-  # 执行完成后的清理工作
-  after_all do |lane|
-    # 清理临时文件
-    clean_build_artifacts if ENV["CLEAN_AFTER_BUILD"] == "true"
-    UI.success("Lane #{lane} 执行完成")
+  desc "Upload dSYM to Firebase Crashlytics"
+  lane :upload_symbols_to_crashlytics do
+    upload_symbols_to_crashlytics(
+      gsp_path: "./taroApp/GoogleService-Info.plist",
+      dsym_path: lane_context[SharedValues::DSYM_OUTPUT_PATH]
+    )
   end
 end
