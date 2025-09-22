@@ -1,39 +1,63 @@
+# ios/fastlane/Fastfile
+
 default_platform(:ios)
 
 platform :ios do
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
-    # 更新版本号（可选）
-    increment_build_number(xcodeproj: "taroApp.xcodeproj")
+  desc "构建 React Native iOS 应用"
+  lane :build do
+    # Step 1: 安装 JS 依赖 (pnpm)
+    sh("cd .. && pnpm install")
 
-    # 编译打包
+    # Step 2: 生成 JS Bundle
+    sh("cd .. && npx react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios")
+
+    # Step 3: 安装 Pods（如果还没装）
+    sh("cd ios && pod install")
+
+    # Step 4: 解锁钥匙串（CI 需要）
+    unlock_keychain(
+      path: "/Users/runner/Library/Keychains/login.keychain-db",
+      password: "" # GitHub Actions macOS runner 默认无密码
+    )
+
+    # Step 5: 启用自动签名（确保 Xcode 项目中也是自动签名）
+    update_code_signing_settings(
+      use_automatic_signing: true,
+      path: "./YourApp.xcodeproj",
+      targets: ["YourApp"] # 替换为你的 target 名
+    )
+
+    # Step 6: 登录 Apple Developer 账号（用于自动管理证书/描述文件）
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_PRIVATE_KEY"],
+      duration: 1200,
+      in_house: false
+    )
+
+    # 或者用 Apple ID 登录（简单但安全性较低）
+    # appstore_login
+
+    # Step 7: 构建并导出 .ipa
     build_app(
-      workspace: "taroApp.xcworkspace",
-      scheme: ENV["SCHEME"] || "taroApp",
-      export_method: ENV["EXPORT_METHOD"] || "app-store",
+      workspace: "YourApp.xcworkspace", # 或 .xcodeproj
+      scheme: "YourApp",
+      export_method: "app-store", # 可选: ad-hoc, enterprise, development
       export_options: {
         provisioningProfiles: {
-          "com.yourcompany.taroApp" => "match AppStore com.yourcompany.taroApp"
+          "com.yourcompany.yourapp" => "match AppStore com.yourcompany.yourapp"
         }
-      }
+      },
+      export_xcargs: "-allowProvisioningUpdates", # 允许自动创建/更新描述文件
+      suppress_xcode_output: true,
+      clean: true
     )
 
-    # 上传到 TestFlight
-    upload_to_testflight(
-      skip_waiting_for_build_processing: true,
-      api_key: app_store_connect_api_key(
-        key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-        issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-        key_content: ENV["APP_STORE_CONNECT_API_KEY_KEY"]
-      )
-    )
-  end
-
-  desc "Upload dSYM to Firebase Crashlytics"
-  lane :upload_symbols_to_crashlytics do
-    upload_symbols_to_crashlytics(
-      gsp_path: "./taroApp/GoogleService-Info.plist",
-      dsym_path: lane_context[SharedValues::DSYM_OUTPUT_PATH]
-    )
+    # 可选：上传 TestFlight
+    # upload_to_testflight(
+    #   skip_waiting_for_build_processing: true,
+    #   notify_external_testers: false
+    # )
   end
 end
