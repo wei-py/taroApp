@@ -61,6 +61,16 @@ target 'taroApp' do
     #   :mac_catalyst_enabled => false
     # )
     installer.pods_project.targets.each do |target|
+      if target.platform_name == :ios && target.build_phase_by_name('Compile Sources')
+        target.build_configurations.each do |config|
+          if config.build_settings['SWIFT_VERSION']
+            config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
+          end
+        end
+      end
+    end
+
+    installer.pods_project.targets.each do |target|
        if target.name == 'ExpoModulesCore' || target.name == 'RCT-Folly' || target.name == 'FBLazyVector'
          target.build_configurations.each do |config|
            config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
