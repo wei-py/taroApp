@@ -1,0 +1,70 @@
+name: Build & Upload iOS App
+
+# 可手动触发，也可自动触发（如 push 到 main）
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  # ✅ 核心构建参数（可直接写死，或从 secrets 引用）
+  APP_ID: ${{ secrets.IOS_APP_ID || 'com.bto.Light' }}
+  APP_NAME: ${{ secrets.IOS_APP_NAME || 'BTOLIGHT' }}
+  VERSION_NUMBER: ${{ secrets.IOS_VERSION_NUMBER || '2.9.0' }}
+  BUILD_NUMBER: ${{ secrets.IOS_BUILD_NUMBER || github.run_number }}
+  BUILD_TYPE: ${{ secrets.IOS_BUILD_TYPE || 'AppStore' }}
+
+  # ✅ 签名 & 团队
+  TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+  PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.IOS_PROVISIONING_PROFILE_SPECIFIER || "BTOLIGHT" }}
+  CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY || 'Apple Distribution' }}
+
+  # ✅ 证书和 Profile（Base64 编码）
+  SIGNING_CERTIFICATE_P12_DATA: ${{ secrets.IOS_SIGNING_CERTIFICATE_P12_DATA }}
+  SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.IOS_SIGNING_CERTIFICATE_PASSWORD }}
+  PROVISIONING_PROFILE_DATA: ${{ secrets.IOS_PROVISIONING_PROFILE_DATA }}
+
+  # ✅ App Store Connect
+  APP_STORE_CONNECT_USERNAME: ${{ secrets.APP_STORE_CONNECT_USERNAME }}
+  APP_STORE_CONNECT_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install React Native Dependencies
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Install Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0
+          bundler-cache: true
+
+      - name: Build iOS App with Fastlane
+        working-directory: ./ios
+        run: |
+          bundle exec fastlane build_app
+
+      - name: Upload to TestFlight (if AppStore build)
+        if: ${{ env.BUILD_TYPE == 'AppStore' }}
+        working-directory: ./ios
+        run: |
+          bundle exec fastlane upload_to_testflight
+
+      - name: Upload Artifact (IPA)
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.APP_NAME }}-${{ env.BUILD_TYPE }}-${{ env.VERSION_NUMBER }}-${{ env.BUILD_NUMBER }}
+          path: ios/*.ipa

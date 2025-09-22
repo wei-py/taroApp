@@ -1,0 +1,107 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "构建并导出 iOS App"
+  lane :build_app do |options|
+    # 从环境变量或参数读取
+    app_identifier = ENV["APP_ID"] || options[:app_identifier]
+    app_name = ENV["APP_NAME"] || options[:app_name]
+    version = ENV["VERSION_NUMBER"] || options[:version]
+    build_number = ENV["BUILD_NUMBER"] || options[:build_number]
+    build_type = ENV["BUILD_TYPE"] || options[:build_type] || "Release"
+
+    team_id = ENV["TEAM_ID"]
+    provisioning_profile_specifier = ENV["PROVISIONING_PROFILE_SPECIFIER"]
+    code_sign_identity = ENV["CODE_SIGN_IDENTITY"]
+
+    # 修改 Display Name
+    update_app_identifier(
+      xcodeproj: "./ios/YourApp.xcodeproj",
+      plist_path: "./ios/YourApp/Info.plist",
+      app_identifier: app_identifier
+    )
+
+    # 修改 Bundle Display Name（APP_NAME）
+    update_info_plist(
+      xcodeproj: "./ios/YourApp.xcodeproj",
+      plist_path: "./ios/YourApp/Info.plist",
+      display_name: app_name
+    )
+
+    # 修改版本号
+    increment_version_number(
+      xcodeproj: "./ios/YourApp.xcodeproj",
+      version_number: version
+    )
+
+    # 修改 Build Number
+    increment_build_number(
+      xcodeproj: "./ios/YourApp.xcodeproj",
+      build_number: build_number
+    )
+
+    # 解码并安装证书和 Provisioning Profile
+    cert_data = ENV["SIGNING_CERTIFICATE_P12_DATA"]
+    cert_password = ENV["SIGNING_CERTIFICATE_PASSWORD"]
+    profile_data = ENV["PROVISIONING_PROFILE_DATA"]
+
+    # 创建临时目录
+    certs_dir = "./fastlane/certs"
+    FileUtils.mkdir_p(certs_dir) unless Dir.exist?(certs_dir)
+
+    # 写入证书
+    cert_path = "#{certs_dir}/cert.p12"
+    File.write(cert_path, Base64.decode64(cert_data), mode: "wb")
+
+    # 写入 Provisioning Profile
+    profile_path = "#{certs_dir}/profile.mobileprovision"
+    File.write(profile_path, Base64.decode64(profile_data), mode: "wb")
+
+    # 安装证书到钥匙串
+    import_certificate(
+      certificate_path: cert_path,
+      certificate_password: cert_password
+    )
+
+    # 安装 Provisioning Profile
+    install_provisioning_profile(path: profile_path)
+
+    # 构建并导出
+    build_app(
+      workspace: "./ios/YourApp.xcworkspace",
+      scheme: "YourApp", # 替换为你的 Scheme
+      export_method: export_method_for(build_type),
+      export_options: {
+        provisioningProfiles: {
+          app_identifier => provisioning_profile_specifier
+        },
+        signingStyle: "manual",
+        teamID: team_id,
+        signingCertificate: code_sign_identity
+      },
+      export_xcargs: "-allowProvisioningUpdates",
+      clean: true
+    )
+  end
+
+  desc "上传到 TestFlight"
+  lane :upload_to_testflight do
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      skip_submission: true
+    )
+  end
+
+  private_lane :export_method_for do |build_type|
+    case build_type.downcase
+    when "appstore"
+      "app-store"
+    when "adhoc"
+      "ad-hoc"
+    when "development"
+      "development"
+    else
+      "app-store"
+    end
+  end
+end
