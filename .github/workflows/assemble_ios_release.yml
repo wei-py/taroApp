@@ -170,6 +170,7 @@ jobs:
       - name: 📦 Install CocoaPods dependencies
         run: |
           cd ios
+          rm -rf Pods Podfile.lock
           pod install --repo-update
 
       - name: 🔍 Pre-build Checks
