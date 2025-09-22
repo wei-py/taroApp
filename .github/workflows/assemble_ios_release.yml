@@ -8,21 +8,21 @@ on:
 
 env:
   # ✅ 核心构建参数（可直接写死，或从 secrets 引用）
-  APP_ID: ${{ secrets.IOS_APP_ID || 'com.bto.Light' }}
-  APP_NAME: ${{ secrets.IOS_APP_NAME || 'BTOLIGHT' }}
-  VERSION_NUMBER: ${{ secrets.IOS_VERSION_NUMBER || '2.9.0' }}
-  BUILD_NUMBER: ${{ secrets.IOS_BUILD_NUMBER || github.run_number }}
-  BUILD_TYPE: ${{ secrets.IOS_BUILD_TYPE || 'AppStore' }}
+  APP_ID: ${{ secrets.APP_ID || 'com.bto.Light' }}
+  APP_NAME: ${{ secrets.APP_NAME || 'BTOLIGHT' }}
+  VERSION_NUMBER: ${{ secrets.VERSION_NUMBER || '2.9.0' }}
+  BUILD_NUMBER: ${{ secrets.BUILD_NUMBER || github.run_number }}
+  BUILD_TYPE: ${{ secrets.BUILD_TYPE || 'AppStore' }}
 
   # ✅ 签名 & 团队
-  TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
-  PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.IOS_PROVISIONING_PROFILE_SPECIFIER || 'BTOLIGHT' }}
-  CODE_SIGN_IDENTITY: ${{ secrets.IOS_CODE_SIGN_IDENTITY || 'Apple Distribution' }}
+  TEAM_ID: ${{ secrets.TEAM_ID }}
+  PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER || 'BTOLIGHT' }}
+  CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_IDENTITY || 'Apple Distribution' }}
 
   # ✅ 证书和 Profile（Base64 编码）
-  SIGNING_CERTIFICATE_P12_DATA: ${{ secrets.IOS_SIGNING_CERTIFICATE_P12_DATA }}
-  SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.IOS_SIGNING_CERTIFICATE_PASSWORD }}
-  PROVISIONING_PROFILE_DATA: ${{ secrets.IOS_PROVISIONING_PROFILE_DATA }}
+  SIGNING_CERTIFICATE_P12_DATA: ${{ secrets.SIGNING_CERTIFICATE_P12_DATA }}
+  SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+  PROVISIONING_PROFILE_DATA: ${{ secrets.PROVISIONING_PROFILE_DATA }}
 
   # ✅ App Store Connect
   APP_STORE_CONNECT_USERNAME: ${{ secrets.APP_STORE_CONNECT_USERNAME }}
