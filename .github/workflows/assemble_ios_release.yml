@@ -3,6 +3,9 @@ name: Build & Upload iOS App
 on:
   push:
     branches: [ main ]
+    tags: [ v* ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 env:
@@ -27,239 +30,104 @@ env:
   APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
   APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
   APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
-  
-  # App Store Connect - 用户名方式（备用）
-  APP_STORE_CONNECT_USERNAME: ${{ secrets.APP_STORE_CONNECT_USERNAME }}
 
 jobs:
-  build-ios:
-    runs-on: macos-latest
-
+  assemble:
+    runs-on: macos-13
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=timestamp::$(date +'%s')"
+      - name: Checkout Project
+        uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: 22
-
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+          version: 8
+      - uses: actions/setup-node@v3
         with:
-          version: latest
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install
+      - name: Cache Pods
+        uses: actions/cache@v3
         with:
-          ruby-version: '3.3'
-          bundler-cache: true
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Install Ruby dependencies
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+      - name: Install pods
+        run: cd ios && pod update --no-repo-update
+      - name: Import signing certificate
+        if: env.SIGNING_CERTIFICATE_P12_DATA != ''
+        env:
+          SIGNING_CERTIFICATE_P12_DATA: ${{ env.SIGNING_CERTIFICATE_P12_DATA }}
+          SIGNING_CERTIFICATE_PASSWORD: ${{ env.SIGNING_CERTIFICATE_PASSWORD }}
         run: |
-          gem install bundler
-          bundle install
-
-      - name: 🔍 Validate Required Secrets
-        run: |
-          echo "🔍 Validating required environment variables..."
-          
-          # 检查必需的签名相关环境变量
-          if [ -z "$TEAM_ID" ]; then
-            echo "❌ TEAM_ID is required but not set"
-            echo "Please set TEAM_ID in GitHub Secrets"
-            exit 1
-          fi
-          
-          if [ -z "$SIGNING_CERTIFICATE_P12_DATA" ]; then
-            echo "❌ SIGNING_CERTIFICATE_P12_DATA is required but not set"
-            exit 1
-          fi
-          
-          if [ -z "$SIGNING_CERTIFICATE_PASSWORD" ]; then
-            echo "❌ SIGNING_CERTIFICATE_PASSWORD is required but not set"
-            exit 1
-          fi
-          
-          if [ -z "$PROVISIONING_PROFILE_DATA" ]; then
-            echo "❌ PROVISIONING_PROFILE_DATA is required but not set"
-            exit 1
-          fi
-          
-          echo "✅ All required environment variables are set"
-          echo "📋 Configuration Summary:"
-          echo "   TEAM_ID: ${TEAM_ID:0:10}..."
-          echo "   APP_ID: $APP_ID"
-          echo "   APP_NAME: $APP_NAME"
-          echo "   VERSION: $VERSION_NUMBER"
-          echo "   BUILD_NUMBER: $BUILD_NUMBER"
-
-      - name: 🔐 Setup iOS Code Signing
-        run: |
-          # 创建临时目录
-          mkdir -p $HOME/certs
-          mkdir -p $HOME/private_keys
-          
-          # 解码并写入证书
-          echo "📝 Decoding certificate..."
-          echo "$SIGNING_CERTIFICATE_P12_DATA" | base64 --decode > $HOME/certs/cert.p12
-          
-          # 解码并写入 Provisioning Profile
-          echo "📝 Decoding provisioning profile..."
-          echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > $HOME/certs/profile.mobileprovision
-          
-          # 验证文件
-          if [ ! -f "$HOME/certs/cert.p12" ] || [ ! -s "$HOME/certs/cert.p12" ]; then
-            echo "❌ Certificate file is missing or empty"
-            exit 1
-          fi
-          
-          if [ ! -f "$HOME/certs/profile.mobileprovision" ] || [ ! -s "$HOME/certs/profile.mobileprovision" ]; then
-            echo "❌ Provisioning profile file is missing or empty"
-            exit 1
-          fi
-          
-          # 创建临时钥匙串
-          echo "🔐 Creating temporary keychain..."
+          set -euo pipefail
           security create-keychain -p "" build.keychain
+          security list-keychains -s build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "" build.keychain
-          security set-keychain-settings -t 3600 -u build.keychain
-          
-          # 导入证书到钥匙串
-          echo "📥 Importing certificate to keychain..."
-          security import $HOME/certs/cert.p12 -k build.keychain -P "$SIGNING_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          
-          # 设置钥匙串访问权限
+          security set-keychain-settings
+          echo $SIGNING_CERTIFICATE_P12_DATA | base64 --decode > signingCertificate.p12
+          security import signingCertificate.p12 \
+                          -f pkcs12 \
+                          -k build.keychain \
+                          -P $SIGNING_CERTIFICATE_PASSWORD \
+                          -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-          
-          # 安装 Provisioning Profile
-          echo "📱 Installing provisioning profile..."
+      - name: Import provisioning profile
+        if: env.PROVISIONING_PROFILE_DATA != ''
+        env:
+          PROVISIONING_PROFILE_DATA: ${{ env.PROVISIONING_PROFILE_DATA }}
+        run: |
+          set -euo pipefail
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $HOME/certs/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-          
-          # 验证证书安装
-          echo "🔍 Verifying certificate installation..."
-          security find-identity -v -p codesigning build.keychain
-          
-          echo "✅ Code signing setup completed"
-
-      - name: 📱 Setup App Store Connect API Key
-        if: env.APP_STORE_CONNECT_API_KEY_CONTENT != ''
-        run: |
-          echo "🔑 Setting up App Store Connect API Key..."
-          
-          # 创建API Key文件
-          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" > $HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8
-          
-          # 验证文件创建
-          if [ -f "$HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8" ]; then
-            echo "✅ API Key file created successfully"
-            echo "📄 API Key path: $HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8"
-            
-            # 设置环境变量供Fastlane使用
-            echo "APP_STORE_CONNECT_API_KEY_PATH=$HOME/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8" >> $GITHUB_ENV
-          else
-            echo "❌ Failed to create API Key file"
-            exit 1
-          fi
-
-      - name: 📦 Install CocoaPods dependencies
+          echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+      - name: Build app
+        env:
+          FL_APP_IDENTIFIER: ${{ env.APP_ID }}
+          FL_UPDATE_PLIST_DISPLAY_NAME: ${{ env.APP_NAME }}
+          FL_UPDATE_PLIST_PATH: taroApp/Info.plist
+          FL_VERSION_NUMBER_VERSION_NUMBER: ${{ env.VERSION_NUMBER }}
+          FL_BUILD_NUMBER_BUILD_NUMBER: ${{ env.BUILD_NUMBER }}.${{steps.date.outputs.timestamp}}
+          FL_CODE_SIGN_IDENTITY: ${{ env.CODE_SIGN_IDENTITY }}
+          FL_PROVISIONING_PROFILE_SPECIFIER: ${{ env.PROVISIONING_PROFILE_SPECIFIER }}
+          FASTLANE_TEAM_ID: ${{ env.TEAM_ID }}
+          NODE_PATH: ${{ github.workspace }}/node_modules/.pnpm/node_modules:$NODE_PATH
         run: |
           cd ios
-          rm -rf Pods Podfile.lock
-          pod install --repo-update
-
-      - name: 🔍 Pre-build Checks
-        run: |
-          echo "🔍 Running pre-build checks..."
-          
-          # 检查Xcode项目文件 - workspace是目录，不是文件
-          if [ ! -d "ios/taroApp.xcworkspace" ]; then
-            echo "❌ Xcode workspace not found"
-            exit 1
-          fi
-          
-          # 检查Fastfile
-          if [ ! -f "ios/fastlane/Fastfile" ]; then
-            echo "❌ Fastfile not found"
-            exit 1
-          fi
-          
-          # 显示Xcode版本
-          xcodebuild -version
-          
-          # 显示可用的签名身份
-          echo "🔍 Available signing identities:"
-          security find-identity -v -p codesigning
-          
-          # 显示已安装的Provisioning Profiles
-          echo "🔍 Installed provisioning profiles:"
-          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || echo "No profiles found"
-          
-          echo "✅ Pre-build checks completed"
-
-      - name: 🚀 Build iOS App with Fastlane
-        run: |
-          echo "🚀 Starting iOS build with detailed logging..."
-          cd ios
-          bundle exec --gemfile=../Gemfile fastlane ios_build
-
-      - name: 📋 Capture Build Logs (on failure)
-        if: failure()
-        run: |
-          echo "📋 Capturing build logs for debugging..."
-          
-          # 查找并显示gym日志
-          if [ -d "$HOME/Library/Logs/gym" ]; then
-            echo "📄 Gym logs:"
-            find $HOME/Library/Logs/gym -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
-          fi
-          
-          # 查找并显示xcodebuild日志
-          if [ -d "$HOME/Library/Developer/Xcode/DerivedData" ]; then
-            echo "📄 Recent build logs:"
-            find $HOME/Library/Developer/Xcode/DerivedData -name "*.xcactivitylog" -mtime -1 | head -5
-          fi
-          
-          # 显示钥匙串信息
-          echo "🔐 Keychain information:"
-          security list-keychains
-          security find-identity -v -p codesigning
-
-      - name: 🚀 Upload to TestFlight (if AppStore build)
-        if: success() && env.BUILD_TYPE == 'AppStore'
-        run: |
-          cd ios
-          bundle exec fastlane testflight_upload
-
-      - name: 📤 Upload IPA Artifact
-        if: success()
+          bundle update
+          bundle exec fastlane build_release
+      - name: Upload iOS Products
         uses: actions/upload-artifact@v4
         with:
-          name: taroApp-${{ env.VERSION_NUMBER }}-${{ env.BUILD_NUMBER }}.ipa
-          path: ios/build/taroApp.ipa
-          retention-days: 30
-
-      - name: 📋 Upload Build Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-logs-${{ github.run_number }}
+          name: app-${{ env.BUILD_TYPE }}
           path: |
-            ~/Library/Logs/gym/
-            ios/fastlane/README.md
-          if-no-files-found: ignore
-          retention-days: 7
-
-      - name: 🧹 Cleanup Keychain
-        if: always()
+            ${{ github.workspace }}/ios/taroApp.ipa
+            ${{ github.workspace }}/ios/taroApp.app.dSYM.zip
+      - name: Upload app to App Store Connect
+        if: env.APP_STORE_CONNECT_API_KEY_ID != '' && env.APP_STORE_CONNECT_ISSUER_ID != '' && env.APP_STORE_CONNECT_API_KEY_CONTENT != ''
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ env.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ env.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ env.APP_STORE_CONNECT_API_KEY_CONTENT }}
         run: |
-          echo "🧹 Cleaning up keychain..."
-          security delete-keychain build.keychain || true
-          rm -rf $HOME/certs || true
-          rm -rf $HOME/private_keys || true
-          echo "✅ Cleanup completed"
+          cd ios
+          bundle exec fastlane upload_to_app_store
+      - name: Rename release assets
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          mv ios/taroApp.ipa ios/app-${{ env.BUILD_TYPE }}.ipa
+          mv ios/taroApp.app.dSYM.zip ios/app-${{ env.BUILD_TYPE }}.app.dSYM.zip
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          prerelease: ${{ contains(github.ref, 'beta') }}
+          files: |
+            ios/app-${{ env.BUILD_TYPE }}.ipa
+            ios/app-${{ env.BUILD_TYPE }}.app.dSYM.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  

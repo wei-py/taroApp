@@ -1,0 +1,188 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "构建并导出 iOS App"
+  lane :ios_build do |options|
+    # 从环境变量或参数读取
+    app_identifier = ENV["APP_ID"] || options[:app_identifier]
+    app_name = ENV["APP_NAME"] || options[:app_name]
+    version = ENV["VERSION_NUMBER"] || options[:version]
+    build_number = ENV["BUILD_NUMBER"] || options[:build_number]
+    build_type = ENV["BUILD_TYPE"] || options[:build_type] || "Release"
+
+    team_id = ENV["TEAM_ID"]
+    provisioning_profile_specifier = ENV["PROVISIONING_PROFILE_SPECIFIER"]
+    code_sign_identity = ENV["CODE_SIGN_IDENTITY"]
+
+    # 验证必要的环境变量
+    if team_id.nil? || team_id.empty?
+      UI.user_error!("TEAM_ID environment variable is required but not set")
+    end
+    
+    if provisioning_profile_specifier.nil? || provisioning_profile_specifier.empty?
+      UI.user_error!("PROVISIONING_PROFILE_SPECIFIER environment variable is required but not set")
+    end
+
+    UI.message("🔧 Build Configuration:")
+    UI.message("   App ID: #{app_identifier}")
+    UI.message("   App Name: #{app_name}")
+    UI.message("   Version: #{version}")
+    UI.message("   Build Number: #{build_number}")
+    UI.message("   Team ID: #{team_id}")
+    UI.message("   Provisioning Profile: #{provisioning_profile_specifier}")
+    UI.message("   Code Sign Identity: #{code_sign_identity}")
+
+    # 修改 Bundle Identifier
+    update_app_identifier(
+      xcodeproj: "taroApp.xcodeproj",
+      plist_path: "taroApp/Info.plist",
+      app_identifier: app_identifier
+    )
+
+    # 修改 Bundle Display Name（APP_NAME）
+    update_info_plist(
+      xcodeproj: "taroApp.xcodeproj",
+      plist_path: "taroApp/Info.plist",
+      display_name: app_name
+    )
+
+    # 修改版本号
+    increment_version_number(
+      xcodeproj: "taroApp.xcodeproj",
+      version_number: version
+    )
+
+    # 修改 Build Number
+    increment_build_number(
+      xcodeproj: "taroApp.xcodeproj",
+      build_number: build_number
+    )
+
+    # 设置代码签名配置
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      team_id: team_id,
+      code_sign_identity: code_sign_identity,
+      profile_name: provisioning_profile_specifier,
+      path: "taroApp.xcodeproj"
+    )
+
+    # 获取导出方法
+    export_method = export_method_for(build_type: build_type)
+    
+    # 使用 gym 来构建和导出
+    gym(
+      workspace: "taroApp.xcworkspace",
+      scheme: "taroApp",
+      export_method: export_method,
+      output_directory: "./build",
+      output_name: "taroApp",
+      codesigning_identity: code_sign_identity,
+      export_options: {
+        "method" => export_method,
+        "provisioningProfiles" => {
+          app_identifier => provisioning_profile_specifier
+        },
+        "signingStyle" => "manual",
+        "teamID" => team_id,
+        "signingCertificate" => code_sign_identity
+      },
+      export_xcargs: "-allowProvisioningUpdates",
+      clean: true
+    )
+    
+    UI.success("✅ Build completed successfully!")
+    UI.message("📦 IPA file location: ./build/taroApp.ipa")
+  end
+
+  desc "上传到 TestFlight"
+  lane :testflight_upload do |options|
+    # 检查是否有API Key配置（推荐方式）
+    api_key_path = ENV["APP_STORE_CONNECT_API_KEY_PATH"]
+    api_key_id = ENV["APP_STORE_CONNECT_API_KEY_ID"]
+    api_issuer_id = ENV["APP_STORE_CONNECT_ISSUER_ID"]
+    
+    # 检查是否有用户名配置（备用方式）
+    username = ENV["APP_STORE_CONNECT_USERNAME"]
+    
+    # 查找IPA文件 - 先检查build目录，再检查当前目录
+    ipa_path = nil
+    
+    # 检查build目录
+    if File.exist?("./build/taroApp.ipa")
+      ipa_path = "./build/taroApp.ipa"
+    else
+      # 检查当前目录
+      ipa_files = Dir.glob("*.ipa")
+      ipa_path = ipa_files.first unless ipa_files.empty?
+    end
+    
+    if ipa_path.nil?
+      UI.user_error!("❌ No IPA file found. Please run ios_build lane first.")
+    end
+    
+    UI.message("📦 Found IPA file: #{ipa_path}")
+    
+    if api_key_path && api_key_id && api_issuer_id
+      # 展开路径中的 ~ 符号
+      expanded_api_key_path = File.expand_path(api_key_path)
+      
+      # 检查文件是否存在
+      unless File.exist?(expanded_api_key_path)
+        UI.user_error!("❌ API Key file not found at path: #{expanded_api_key_path}")
+      end
+      
+      # 使用 API Key 方式（推荐）
+      UI.message("🔑 Using App Store Connect API Key for authentication")
+      UI.message("📄 API Key path: #{expanded_api_key_path}")
+      
+      # 创建 API Key 配置
+      api_key = app_store_connect_api_key(
+        key_id: api_key_id,
+        issuer_id: api_issuer_id,
+        key_filepath: expanded_api_key_path
+      )
+      
+      pilot(
+        api_key: api_key,
+        ipa: ipa_path,
+        skip_waiting_for_build_processing: true,
+        skip_submission: true
+      )
+    elsif username
+      # 使用用户名方式（需要应用专用密码）
+      UI.message("👤 Using username for authentication")
+      pilot(
+        username: username,
+        ipa: ipa_path,
+        skip_waiting_for_build_processing: true,
+        skip_submission: true
+      )
+    else
+      # 尝试使用默认认证
+      UI.message("🔐 Using default authentication method")
+      pilot(
+        ipa: ipa_path,
+        skip_waiting_for_build_processing: true,
+        skip_submission: true
+      )
+    end
+    
+    UI.success("✅ Upload to TestFlight completed successfully!")
+  end
+
+  # 私有方法 - 修复参数格式
+  private_lane :export_method_for do |options|
+    build_type = options[:build_type]
+    case build_type.downcase
+    when "appstore"
+      "app-store"
+    when "adhoc"
+      "ad-hoc"
+    when "development"
+      "development"
+    else
+      "app-store"
+    end
+  end
+end
