@@ -23,15 +23,15 @@ platform :ios do
     # Step 5: 启用自动签名（确保 Xcode 项目中也是自动签名）
     update_code_signing_settings(
       use_automatic_signing: true,
-      path: "./YourApp.xcodeproj",
-      targets: ["YourApp"] # 替换为你的 target 名
+      path: "./taroApp.xcodeproj",
+      targets: ["taroApp"] # 替换为你的 target 名
     )
 
     # Step 6: 登录 Apple Developer 账号（用于自动管理证书/描述文件）
     app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_PRIVATE_KEY"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
       duration: 1200,
       in_house: false
     )
@@ -41,12 +41,12 @@ platform :ios do
 
     # Step 7: 构建并导出 .ipa
     build_app(
-      workspace: "YourApp.xcworkspace", # 或 .xcodeproj
-      scheme: "YourApp",
+      workspace: "taroApp.xcworkspace", # 或 .xcodeproj
+      scheme: "taroApp",
       export_method: "app-store", # 可选: ad-hoc, enterprise, development
       export_options: {
         provisioningProfiles: {
-          "com.yourcompany.yourapp" => "match AppStore com.yourcompany.yourapp"
+          "com.bto.Light" => "BTOLIGHT"
         }
       },
       export_xcargs: "-allowProvisioningUpdates", # 允许自动创建/更新描述文件

@@ -4,6 +4,12 @@ on:
   push:
     branches: [main, release]
 
+env:
+  APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_API_KEY_CONTENT: {{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+
+
 jobs:
   build-ios:
     runs-on: macos-latest
@@ -45,9 +51,9 @@ jobs:
         working-directory: ios
         env:
           # Apple App Store Connect API Key (推荐)
-          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
 
           # 或者用 Apple ID（不推荐用于生产）
           # FASTLANE_USER: ${{ secrets.APPLE_ID }}
