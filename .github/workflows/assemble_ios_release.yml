@@ -6,7 +6,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-
 env:
   # ✅ 核心构建参数（可直接写死，或从 secrets 引用）
   APP_ID: ${{ secrets.IOS_APP_ID || 'com.bto.Light' }}
@@ -70,11 +69,36 @@ jobs:
           ruby-version: 3.3.0
           bundler-cache: true
 
+      # ✅ 新增：设置代码签名证书和 Provisioning Profile
+      - name: Setup iOS Code Signing
+        if: ${{ env.SIGNING_CERTIFICATE_P12_DATA != '' && env.PROVISIONING_PROFILE_DATA != '' }}
+        run: |
+          # 创建临时目录
+          mkdir -p ~/certs
+          
+          # 解码并写入证书
+          echo "$SIGNING_CERTIFICATE_P12_DATA" | base64 --decode > ~/certs/cert.p12
+          
+          # 解码并写入 Provisioning Profile
+          echo "$PROVISIONING_PROFILE_DATA" | base64 --decode > ~/certs/profile.mobileprovision
+          
+          # 创建临时钥匙串
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security set-keychain-settings -t 3600 -u build.keychain
+          
+          # 导入证书到钥匙串
+          security import ~/certs/cert.p12 -k build.keychain -P "$SIGNING_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          
+          # 安装 Provisioning Profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp ~/certs/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
       - name: Install CocoaPods Dependencies
         working-directory: ./ios
         run: |
-          # rm -rf Pods
-          # rm -rf Podfile.lock
           pod install --repo-update
 
       - name: Build iOS App with Fastlane
@@ -93,3 +117,10 @@ jobs:
         with:
           name: ${{ env.APP_NAME }}-${{ env.BUILD_TYPE }}-${{ env.VERSION_NUMBER }}-${{ env.BUILD_NUMBER }}
           path: ios/*.ipa
+
+      # ✅ 新增：清理钥匙串
+      - name: Cleanup
+        if: always()
+        run: |
+          security delete-keychain build.keychain || true
+          rm -rf ~/certs || true

@@ -14,62 +14,38 @@ platform :ios do
     provisioning_profile_specifier = ENV["PROVISIONING_PROFILE_SPECIFIER"]
     code_sign_identity = ENV["CODE_SIGN_IDENTITY"]
 
-    # 修改 Display Name
+    # ✅ 修复项目名称：traoApp -> taroApp
+    # 修改 Bundle Identifier
     update_app_identifier(
-      xcodeproj: "./ios/traoApp.xcodeproj",
-      plist_path: "./ios/traoApp/Info.plist",
+      xcodeproj: "taroApp.xcodeproj",
+      plist_path: "taroApp/Info.plist",
       app_identifier: app_identifier
     )
 
     # 修改 Bundle Display Name（APP_NAME）
     update_info_plist(
-      xcodeproj: "./ios/traoApp.xcodeproj",
-      plist_path: "./ios/traoApp/Info.plist",
+      xcodeproj: "taroApp.xcodeproj",
+      plist_path: "taroApp/Info.plist",
       display_name: app_name
     )
 
     # 修改版本号
     increment_version_number(
-      xcodeproj: "./ios/traoApp.xcodeproj",
+      xcodeproj: "taroApp.xcodeproj",
       version_number: version
     )
 
     # 修改 Build Number
     increment_build_number(
-      xcodeproj: "./ios/traoApp.xcodeproj",
+      xcodeproj: "taroApp.xcodeproj",
       build_number: build_number
     )
 
-    # 解码并安装证书和 Provisioning Profile
-    cert_data = ENV["SIGNING_CERTIFICATE_P12_DATA"]
-    cert_password = ENV["SIGNING_CERTIFICATE_PASSWORD"]
-    profile_data = ENV["PROVISIONING_PROFILE_DATA"]
-
-    # 创建临时目录
-    certs_dir = "./fastlane/certs"
-    FileUtils.mkdir_p(certs_dir) unless Dir.exist?(certs_dir)
-
-    # 写入证书
-    cert_path = "#{certs_dir}/cert.p12"
-    File.write(cert_path, Base64.decode64(cert_data), mode: "wb")
-
-    # 写入 Provisioning Profile
-    profile_path = "#{certs_dir}/profile.mobileprovision"
-    File.write(profile_path, Base64.decode64(profile_data), mode: "wb")
-
-    # 安装证书到钥匙串
-    import_certificate(
-      certificate_path: cert_path,
-      certificate_password: cert_password
-    )
-
-    # 安装 Provisioning Profile
-    install_provisioning_profile(path: profile_path)
-
+    # ✅ 简化代码签名处理（证书已在 GitHub Actions 中安装）
     # 构建并导出
     build_app(
-      workspace: "./ios/traoApp.xcworkspace",
-      scheme: "traoApp", # 替换为你的 Scheme
+      workspace: "taroApp.xcworkspace",
+      scheme: "taroApp",
       export_method: export_method_for(build_type),
       export_options: {
         provisioningProfiles: {
