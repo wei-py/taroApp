@@ -34,7 +34,7 @@ env:
   
   # 签名配置
   TEAM_ID: ${{ secrets.TEAM_ID }}
-  PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}
+  PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER || 'BTOLIGHT' }}
   CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_IDENTITY || 'Apple Distribution' }}
   
   # 证书和配置文件 (Base64编码)

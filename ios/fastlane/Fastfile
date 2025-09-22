@@ -76,7 +76,7 @@ platform :ios do
     notify_success("✅ #{APP_NAME} 已成功发布到 App Store Connect")
   end
 
-  desc "🧪 构建测试版本"
+  desc "🧪 构建并上传 TestFlight 版本"
   lane :beta do
     # 更新版本信息
     update_app_version
@@ -85,7 +85,7 @@ platform :ios do
     build_testflight_version
     
     # 上传到 TestFlight
-    upload_to_testflight
+    upload_testflight_build
     
     # 发送通知
     notify_success("✅ #{APP_NAME} 测试版本已上传到 TestFlight")
@@ -161,6 +161,15 @@ platform :ios do
     # 清理构建缓存
     cleanup_build_files
     
+    # 确保有正确的签名配置
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      team_id: TEAM_ID,
+      code_sign_identity: CODE_SIGN_IDENTITY,
+      profile_name: PROVISIONING_PROFILE_SPECIFIER,
+      path: "taroApp.xcodeproj"
+    )
+    
     # 构建应用
     build_app(
       scheme: SCHEME_NAME,
@@ -175,8 +184,7 @@ platform :ios do
         compileBitcode: false,
         uploadBitcode: false,
         uploadSymbols: true,
-        manageAppVersionAndBuildNumber: false,
-        destination: "export"
+        manageAppVersionAndBuildNumber: false
       },
       output_directory: "./build",
       output_name: "#{APP_NAME}_#{VERSION_NUMBER}_#{BUILD_NUMBER}_TestFlight.ipa",
@@ -214,28 +222,21 @@ platform :ios do
     end
   end
 
-  desc "🧪 上传到 TestFlight"
-  private_lane :upload_to_testflight do
-    UI.header "🧪 上传到 TestFlight"
+  desc "📤 上传到 TestFlight"
+  private_lane :upload_testflight_build do
+    UI.header "📤 上传到 TestFlight"
     
-    begin
-      upload_to_testflight(
-        ipa: lane_context[SharedValues::IPA_OUTPUT_PATH],
-        skip_submission: false,
-        skip_waiting_for_build_processing: false,
-        notify_external_testers: false,
-        changelog: "自动构建版本 #{VERSION_NUMBER} (#{BUILD_NUMBER})",
-        beta_app_description: "#{APP_NAME} 测试版本",
-        beta_app_feedback_email: ENV["BETA_FEEDBACK_EMAIL"],
-        distribute_external: false
-      )
-      
-      UI.success "应用已成功上传到 TestFlight"
-    rescue => exception
-      UI.error "上传到 TestFlight 失败: #{exception.message}"
-      notify_failure("❌ #{APP_NAME} 上传到 TestFlight 失败: #{exception.message}")
-      raise exception
-    end
+    upload_to_testflight(
+      ipa: lane_context[SharedValues::IPA_OUTPUT_PATH],
+      skip_waiting_for_build_processing: true,
+      skip_submission: true,
+      distribute_external: false,
+      notify_external_testers: false,
+      changelog: "通过 Fastlane 自动构建和上传"
+    )
+    
+    UI.success "🎉 应用已成功上传到 TestFlight!"
+    notify_success("🎉 TestFlight 上传成功: 应用 #{APP_NAME} v#{VERSION_NUMBER}(#{BUILD_NUMBER}) 已成功上传到 TestFlight")
   end
 
   desc "🔑 设置 App Store Connect API Key"
@@ -318,25 +319,20 @@ platform :ios do
     end
   end
 
-  # 错误处理
+  # 修复错误处理
   error do |lane, exception, options|
     UI.error "Lane #{lane} 执行失败"
     UI.error "错误信息: #{exception.message}"
     
-    # 清理资源
+    # 清理构建文件
     cleanup_build_files
     
-    # 发送失败通知
-    notify_failure("❌ Lane #{lane} 执行失败: #{exception.message}")
+    # 发送错误通知
+    notify_failure("❌ 构建失败: Lane #{lane} 执行失败: #{exception.message}")
   end
 
-  # 执行完成后的清理工作
   after_all do |lane, options|
-    UI.success "Lane #{lane} 执行完成"
-    
-    # 可选的清理工作
-    if ENV["CLEAN_AFTER_BUILD"] == "true"
-      cleanup_build_files
-    end
+    UI.success "🎉 Lane #{lane} 执行完成"
+    cleanup_build_files
   end
 end
