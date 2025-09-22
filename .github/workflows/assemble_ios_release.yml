@@ -176,8 +176,8 @@ jobs:
           export FASTLANE_HIDE_GITHUB_ISSUES=1
           export FASTLANE_SKIP_UPDATE_CHECK=1
           
-          # 运行 fastlane 构建（使用新的 lane 名称）
-          bundle exec fastlane build_ios_app --verbose
+          # 运行 fastlane 构建（使用修复后的 lane 名称）
+          bundle exec fastlane ios_build --verbose
         continue-on-error: true
 
       # ✅ 如果构建失败，尝试获取详细日志
@@ -204,7 +204,7 @@ jobs:
         if: ${{ env.BUILD_TYPE == 'AppStore' && success() }}
         working-directory: ./ios
         run: |
-          bundle exec fastlane upload_testflight
+          bundle exec fastlane testflight_upload
 
       - name: Upload Artifact (IPA)
         if: success()

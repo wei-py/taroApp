@@ -2,7 +2,7 @@ default_platform(:ios)
 
 platform :ios do
   desc "构建并导出 iOS App"
-  lane :build_ios_app do |options|
+  lane :ios_build do |options|
     # 从环境变量或参数读取
     app_identifier = ENV["APP_ID"] || options[:app_identifier]
     app_name = ENV["APP_NAME"] || options[:app_name]
@@ -40,7 +40,7 @@ platform :ios do
       build_number: build_number
     )
 
-    # 使用 gym 来构建和导出（避免和 lane 名称冲突）
+    # 使用 gym 来构建和导出
     gym(
       workspace: "taroApp.xcworkspace",
       scheme: "taroApp",
@@ -59,8 +59,22 @@ platform :ios do
   end
 
   desc "上传到 TestFlight"
-  lane :upload_testflight do
+  lane :testflight_upload do
+    # 确保有必要的认证信息
+    username = ENV["APP_STORE_CONNECT_USERNAME"]
+    password = ENV["APP_STORE_CONNECT_PASSWORD"]
+    
+    if username.nil? || username.empty?
+      UI.user_error!("APP_STORE_CONNECT_USERNAME environment variable is required")
+    end
+    
+    if password.nil? || password.empty?
+      UI.user_error!("APP_STORE_CONNECT_PASSWORD environment variable is required")
+    end
+    
     pilot(
+      username: username,
+      password: password,
       skip_waiting_for_build_processing: true,
       skip_submission: true
     )
