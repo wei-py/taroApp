@@ -2,10 +2,11 @@ name: Build & Upload iOS App
 
 # 可手动触发，也可自动触发（如 push 到 main）
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+  workflow_dispatch:
+
 
 env:
   # ✅ 核心构建参数（可直接写死，或从 secrets 引用）
