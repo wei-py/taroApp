@@ -49,8 +49,19 @@ jobs:
         with:
           version: latest
 
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
       - name: Install dependencies
         run: pnpm install
+
+      - name: Install Ruby dependencies
+        run: |
+          gem install bundler
+          bundle install
 
       - name: 🔍 Validate Required Secrets
         run: |
@@ -194,7 +205,7 @@ jobs:
         run: |
           echo "🚀 Starting iOS build with detailed logging..."
           cd ios
-          bundle exec fastlane ios_build
+          bundle exec --gemfile=../Gemfile fastlane ios_build
 
       - name: 📋 Capture Build Logs (on failure)
         if: failure()
