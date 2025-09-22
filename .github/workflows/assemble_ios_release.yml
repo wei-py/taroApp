@@ -40,11 +40,16 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
       
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
-        cache: 'npm'
+        node-version: 22
+        cache: 'pnpm'
         
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
@@ -55,7 +60,7 @@ jobs:
         
     - name: Install Dependencies
       run: |
-        npm ci
+        pnpm install --frozen-lockfile
         cd ios && bundle install
         
     - name: Install CocoaPods Dependencies
@@ -65,7 +70,7 @@ jobs:
         
     - name: Build Taro RN Bundle
       run: |
-        npm run build:rn
+        pnpm run build:rn
         
     - name: Setup Keychain
       run: |
