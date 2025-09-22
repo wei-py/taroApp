@@ -19,7 +19,7 @@ on:
       skip_tests:
         description: '跳过测试'
         required: false
-        default: false
+        default: true
         type: boolean
 
 env:
