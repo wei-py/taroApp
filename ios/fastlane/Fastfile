@@ -40,14 +40,16 @@ platform :ios do
       build_number: build_number
     )
 
-    # 获取导出方法
-    export_method = export_method_for(build_type)
+    # 获取导出方法 - 修复私有方法调用
+    export_method = export_method_for(build_type: build_type)
     
-    # 使用 gym 来构建和导出
+    # 使用 gym 来构建和导出 - 指定输出目录
     gym(
       workspace: "taroApp.xcworkspace",
       scheme: "taroApp",
       export_method: export_method,
+      output_directory: "./build",
+      output_name: "taroApp",
       export_options: {
         "provisioningProfiles" => {
           app_identifier => provisioning_profile_specifier
@@ -59,10 +61,13 @@ platform :ios do
       export_xcargs: "-allowProvisioningUpdates",
       clean: true
     )
+    
+    UI.success("Build completed successfully!")
+    UI.message("IPA file location: ./build/taroApp.ipa")
   end
 
   desc "上传到 TestFlight"
-  lane :testflight_upload do
+  lane :testflight_upload do |options|
     # 检查是否有API Key配置（推荐方式）
     api_key_path = ENV["APP_STORE_CONNECT_API_KEY_PATH"]
     api_key_id = ENV["APP_STORE_CONNECT_API_KEY_ID"]
@@ -71,10 +76,20 @@ platform :ios do
     # 检查是否有用户名配置（备用方式）
     username = ENV["APP_STORE_CONNECT_USERNAME"]
     
-    # 查找IPA文件
-    ipa_path = Dir.glob("*.ipa").first
+    # 查找IPA文件 - 先检查build目录，再检查当前目录
+    ipa_path = nil
+    
+    # 检查build目录
+    if File.exist?("./build/taroApp.ipa")
+      ipa_path = "./build/taroApp.ipa"
+    else
+      # 检查当前目录
+      ipa_files = Dir.glob("*.ipa")
+      ipa_path = ipa_files.first unless ipa_files.empty?
+    end
+    
     if ipa_path.nil?
-      UI.user_error!("No IPA file found in current directory")
+      UI.user_error!("No IPA file found. Please run ios_build lane first.")
     end
     
     UI.message("Found IPA file: #{ipa_path}")
@@ -123,9 +138,13 @@ platform :ios do
         skip_submission: true
       )
     end
+    
+    UI.success("Upload to TestFlight completed successfully!")
   end
 
-  private_lane :export_method_for do |build_type|
+  # 私有方法 - 修复参数格式
+  private_lane :export_method_for do |options|
+    build_type = options[:build_type]
     case build_type.downcase
     when "appstore"
       "app-store"
