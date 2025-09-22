@@ -1,0 +1,890 @@
+
+🚀 Starting iOS build with detailed logging...
+/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/highline-2.0.3/lib/highline.rb:17: warning: abbrev was loaded from the standard library, but will no longer be part of the default gems since Ruby 3.4.0. Add abbrev to your Gemfile or gemspec. Also contact author of highline-2.0.3 to add abbrev into its gemspec.
+DEBUG [2025-09-22 08:00:14.83]: Checking if there are any plugins that should be loaded...
+Successfully loaded Appfile at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/Appfile'
+-------
+Successfully loaded Appfile at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/Appfile'
+-------
+INFO [2025-09-22 08:00:15.38]: Sending anonymous analytics information
+INFO [2025-09-22 08:00:15.38]: Learn more at https://docs.fastlane.tools/#metrics
+INFO [2025-09-22 08:00:15.38]: No personal or sensitive data is sent.
+INFO [2025-09-22 08:00:15.38]: You can disable this by adding `opt_out_usage` at the top of your Fastfile
+INFO [2025-09-22 08:00:15.42]: ------------------------------
+INFO [2025-09-22 08:00:15.42]: --- Step: default_platform ---
+INFO [2025-09-22 08:00:15.42]: ------------------------------
+INFO [2025-09-22 08:00:15.42]: Driving the lane 'ios ios_build' 🚀
+Successfully loaded Appfile at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/Appfile'
+-------
+Successfully loaded Appfile at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/Appfile'
+-------
+INFO [2025-09-22 08:00:15.42]: -----------------------------------
+INFO [2025-09-22 08:00:15.42]: --- Step: update_app_identifier ---
+INFO [2025-09-22 08:00:15.42]: -----------------------------------
+INFO [2025-09-22 08:00:15.59]: Updated taroApp.xcodeproj 💾.
+INFO [2025-09-22 08:00:15.59]: -------------------------------
+INFO [2025-09-22 08:00:15.59]: --- Step: update_info_plist ---
+INFO [2025-09-22 08:00:15.59]: -------------------------------
+INFO [2025-09-22 08:00:15.61]: Updated taroApp.xcodeproj/../taroApp/Info.plist 💾.
+INFO [2025-09-22 08:00:15.61]: --------------------------------------
+INFO [2025-09-22 08:00:15.61]: --- Step: increment_version_number ---
+INFO [2025-09-22 08:00:15.61]: --------------------------------------
+INFO [2025-09-22 08:00:15.61]: $ cd /Users/runner/work/taroApp/taroApp/ios && agvtool what-marketing-version -terse1
+INFO [2025-09-22 08:00:17.93]: ▸ $(MARKETING_VERSION)
+DEBUG [2025-09-22 08:00:17.93]: Your current version ($(MARKETING_VERSION)) does not respect the format A or A.B or A.B.C
+INFO [2025-09-22 08:00:17.94]: $ cd /Users/runner/work/taroApp/taroApp/ios && agvtool new-marketing-version 2.9.0
+INFO [2025-09-22 08:00:18.18]: ▸ Setting CFBundleShortVersionString of project taroApp to:
+INFO [2025-09-22 08:00:18.18]: ▸ 2.9.0.
+INFO [2025-09-22 08:00:18.20]: ▸ Updating CFBundleShortVersionString in Info.plist(s)...
+INFO [2025-09-22 08:00:18.25]: ▸ Updated CFBundleShortVersionString in "taroApp.xcodeproj/../taroApp/Info.plist" to 2.9.0
+INFO [2025-09-22 08:00:18.28]: ▸ Updated CFBundleShortVersionString in "taroApp.xcodeproj/../taroAppTests/Info.plist" to 2.9.0
+INFO [2025-09-22 08:00:18.29]: ------------------------------------
+INFO [2025-09-22 08:00:18.29]: --- Step: increment_build_number ---
+INFO [2025-09-22 08:00:18.29]: ------------------------------------
+Current version of project taroApp is: 
+    1
+
+/Users/runner/work/taroApp/taroApp/ios
+INFO [2025-09-22 08:00:18.47]: $ cd /Users/runner/work/taroApp/taroApp/ios && agvtool new-version -all 23 && cd -
+INFO [2025-09-22 08:00:18.62]: ▸ Setting version of project taroApp to:
+INFO [2025-09-22 08:00:18.62]: ▸ 23.
+INFO [2025-09-22 08:00:18.64]: ▸ Also setting CFBundleVersion key (assuming it exists)
+INFO [2025-09-22 08:00:18.69]: ▸ Updating CFBundleVersion in Info.plist(s)...
+INFO [2025-09-22 08:00:18.74]: ▸ Updated CFBundleVersion in "taroApp.xcodeproj/../taroApp/Info.plist" to 23
+INFO [2025-09-22 08:00:18.77]: ▸ Updated CFBundleVersion in "taroApp.xcodeproj/../taroAppTests/Info.plist" to 23
+INFO [2025-09-22 08:00:18.77]: ▸ /Users/runner/work/taroApp/taroApp/ios
+INFO [2025-09-22 08:00:18.77]: --------------------------------------------------
+INFO [2025-09-22 08:00:18.77]: --- Step: Switch to ios export_method_for lane ---
+INFO [2025-09-22 08:00:18.77]: --------------------------------------------------
+INFO [2025-09-22 08:00:18.77]: Cruising over to lane 'ios export_method_for' 🚖
+INFO [2025-09-22 08:00:18.77]: Cruising back to lane 'ios ios_build' 🚘
+INFO [2025-09-22 08:00:18.81]: -----------------
+INFO [2025-09-22 08:00:18.81]: --- Step: gym ---
+INFO [2025-09-22 08:00:18.81]: -----------------
+WARN [2025-09-22 08:00:18.83]: Resolving Swift Package Manager dependencies...
+INFO [2025-09-22 08:00:18.83]: $ xcodebuild -resolvePackageDependencies -workspace taroApp.xcworkspace -scheme taroApp
+INFO [2025-09-22 08:00:19.58]: ▸ Command line invocation:
+INFO [2025-09-22 08:00:19.58]: ▸     /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild -resolvePackageDependencies -workspace taroApp.xcworkspace -scheme taroApp
+INFO [2025-09-22 08:00:21.56]: ▸ resolved source packages: 
+INFO [2025-09-22 08:00:21.87]: $ xcodebuild -showBuildSettings -workspace taroApp.xcworkspace -scheme taroApp 2>&1
+WARN [2025-09-22 08:00:25.00]: Command timed out after 3 seconds on try 1 of 4, trying again with a 6 second timeout...
+DEBUG [2025-09-22 08:00:29.69]: Parsing project file '/Users/runner/work/taroApp/taroApp/ios/taroApp.xcodeproj' to find selected provisioning profiles
+DEBUG [2025-09-22 08:00:29.69]: Finding provision profiles for 'Release'
+DEBUG [2025-09-22 08:00:29.73]: Merging provisioning profile mappings
+DEBUG [2025-09-22 08:00:29.73]: -------------------------------------
+DEBUG [2025-09-22 08:00:29.73]: Primary provisioning profile mapping:
+DEBUG [2025-09-22 08:00:29.73]: {}
+DEBUG [2025-09-22 08:00:29.73]: Secondary provisioning profile mapping:
+DEBUG [2025-09-22 08:00:29.73]: {:"com.bto.Light"=>"BTOLIGHT"}
+DEBUG [2025-09-22 08:00:29.73]: Resulting in the following mapping:
+DEBUG [2025-09-22 08:00:29.73]: {:"com.bto.Light"=>"BTOLIGHT"}
+INFO [2025-09-22 08:00:29.73]: Detected provisioning profile mapping: {:"com.bto.Light"=>"BTOLIGHT"}
+
++---------------------------------------------------------------------------------------------------------------+
+|                                            Summary for gym 2.228.0                                            |
++---------------------------------------------------+-----------------------------------------------------------+
+| workspace                                         | taroApp.xcworkspace                                       |
+| scheme                                            | taroApp                                                   |
+| export_method                                     | app-store                                                 |
+| output_directory                                  | ./build                                                   |
+| output_name                                       | taroApp                                                   |
+| export_options.provisioningProfiles.com.bto.Light | BTOLIGHT                                                  |
+| export_options.signingStyle                       | manual                                                    |
+| export_options.teamID                             | ***                                                |
+| export_options.signingCertificate                 | Apple Distribution                                        |
+| export_options.provisioningProfiles.com.bto.Light | BTOLIGHT                                                  |
+| export_xcargs                                     | -allowProvisioningUpdates                                 |
+| clean                                             | true                                                      |
+| silent                                            | false                                                     |
+| skip_package_ipa                                  | false                                                     |
+| skip_package_pkg                                  | false                                                     |
+| build_path                                        | /Users/runner/Library/Developer/Xcode/Archives/2025-09-22 |
+| result_bundle                                     | false                                                     |
+| buildlog_path                                     | ~/Library/Logs/gym                                        |
+| destination                                       | generic/platform=iOS                                      |
+| xcodebuild_formatter                              | xcbeautify                                                |
+| build_timing_summary                              | false                                                     |
+| skip_profile_detection                            | false                                                     |
+| xcodebuild_command                                | xcodebuild                                                |
+| skip_package_dependencies_resolution              | false                                                     |
+| disable_package_automatic_updates                 | false                                                     |
+| use_system_scm                                    | false                                                     |
+| xcode_path                                        | /Applications/Xcode_16.4.app                              |
++---------------------------------------------------+-----------------------------------------------------------+
+
++---------------------------------------------------------------------------------------------------------------------------------------+
+|                                                        Generated Build Command                                                        |
++----------------------------------------------------------------------------------------------------------------+----------------------+
+| Option                                                                                                         | Value                |
++----------------------------------------------------------------------------------------------------------------+----------------------+
+| set -o pipefail &&                                                                                             |                      |
+| xcodebuild                                                                                                     |                      |
+| -workspace taroApp.xcworkspace                                                                                 |                      |
+| -scheme taroApp                                                                                                |                      |
+| -destination                                                                                                   | generic/platform=iOS |
+| -archivePath /Users/runner/Library/Developer/Xcode/Archives/2025-09-22/taroApp\ 2025-09-22\ 08.00.29.xcarchive |                      |
+| clean                                                                                                          |                      |
+| archive                                                                                                        |                      |
+| | tee /Users/runner/Library/Logs/gym/taroApp-taroApp.log                                                       |                      |
+| | xcbeautify                                                                                                   |                      |
++----------------------------------------------------------------------------------------------------------------+----------------------+
+INFO [2025-09-22 08:00:29.79]: $ set -o pipefail && xcodebuild -workspace taroApp.xcworkspace -scheme taroApp -destination 'generic/platform=iOS' -archivePath /Users/runner/Library/Developer/Xcode/Archives/2025-09-22/taroApp\ 2025-09-22\ 08.00.29.xcarchive clean archive | tee /Users/runner/Library/Logs/gym/taroApp-taroApp.log | xcbeautify
+INFO [2025-09-22 08:00:29.85]: ▸ ----- xcbeautify -----
+INFO [2025-09-22 08:00:29.85]: ▸ Version: 2.30.1
+INFO [2025-09-22 08:00:29.85]: ▸ ----------------------
+INFO [2025-09-22 08:00:37.03]: ▸ Clean Succeeded
+INFO [2025-09-22 08:00:41.77]: ▸ note: Building targets in dependency order
+INFO [2025-09-22 08:00:41.80]: ▸ note: Target dependency graph (99 targets)
+INFO [2025-09-22 08:00:59.67]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-rncore' from project 'Pods')
+INFO [2025-09-22 08:00:59.67]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXConstants' from project 'Pods')
+INFO [2025-09-22 08:00:59.67]: ▸ ::warning ::Run script build phase '[CP-User] Generate app.config for prebuilt Constants.manifest' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'EXConstants' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-callinvoker' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-logger' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-jserrorhandler' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-FabricImage' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Yoga' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'hermes-engine' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ ::warning ::Run script build phase '[CP-User] [Hermes] Replace Hermes for the right configuration, if needed' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'hermes-engine' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-runtimescheduler' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-Folly' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoKeepAwake' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-PeerTalk' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTNetwork' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-netinfo' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-graphics' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'FlipperKit' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RCTRequired' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-hermes' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNSVG' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNDeviceInfo' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNGestureHandler' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'CocoaAsyncSocket' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoCamera' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'boost' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Expo' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXAV' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-ImageManager' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RCT-Folly' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-NativeModulesApple' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-rendererdebug' from project 'Pods')
+INFO [2025-09-22 08:00:59.71]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-webview' from project 'Pods')
+INFO [2025-09-22 08:00:59.71]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoFileSystem-ExpoFileSystem_privacy' from project 'Pods')
+bundler: failed to load command: fastlane (/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane)
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXConstants-ExpoConstants_privacy' from project 'Pods')
+/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/interface.rb:163:in `build_failure!': [!] Error building the application - see the log above (FastlaneCore::Interface::FastlaneBuildFailure)
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTImage' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/ui.rb:17:in `method_missing'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-Fmt' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/error_handler.rb:73:in `handle_build_error'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-CoreModules' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:114:in `block in build_app'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTLinking' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/command_executor.rb:86:in `execute'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Core' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:110:in `build_app'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTText' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:18:in `run'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'FBReactNativeSpec' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/manager.rb:19:in `work'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTActionSheet' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/build_app.rb:68:in `run'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNCClipboard' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:263:in `block (2 levels) in execute_action'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-safe-area-context' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/actions_helper.rb:69:in `execute_action'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNCAsyncStorage' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'libevent' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `chdir'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-debug' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-pager-view' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-jsiexecutor' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-Glog' from project 'Pods')
+	from Fastfile:47:in `block (2 levels) in parsing_binding'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-cameraroll' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane.rb:41:in `call'
+INFO [2025-09-22 08:00:59.73]: ▸ ::warning file=/Users/runner/work/taroApp/taroApp/ios/Pods/Pods.xcodeproj::The iOS deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 9.0, but the range of supported deployment target versions is 12.0 to 18.5.99. (in target 'RNDeviceInfo-RNDeviceInfoPrivacyInfo' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNDeviceInfo-RNDeviceInfoPrivacyInfo' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTBlob' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `execute'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTAppDelegate' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTSettings' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Mapbuffer' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-geolocation' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNScreens' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNCPicker' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Codegen' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-runtimeexecutor' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoFileSystem' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:363:in `run'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoImagePicker' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoModulesCore' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXBarCodeScanner' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/bin/fastlane:23:in `<top (required)>'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXFont' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane:25:in `load'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-jsinspector' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane:25:in `<top (required)>'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ZXingObjC' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:58:in `load'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoBrightness' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:58:in `kernel_load'
+INFO [2025-09-22 08:00:59.74]: ▸ ::error file=/Users/runner/work/taroApp/taroApp/ios/taroApp.xcodeproj::Signing for "taroApp" requires a development team. Select a development team in the Signing & Capabilities editor. (in target 'taroApp' from project 'taroApp')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:23:in `run'
+INFO [2025-09-22 08:00:59.74]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'taroApp' from project 'taroApp')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:451:in `exec'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Run script build phase '[Expo] Configure project' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'taroApp' from project 'taroApp')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+INFO [2025-09-22 08:00:59.78]: ▸ ::warning ::Run script build phase 'Bundle React Native code and images' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'taroApp' from project 'taroApp')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Core-RCTI18nStrings' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor.rb:527:in `dispatch'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Pods-taroApp' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:34:in `dispatch'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-Boost-iOSX' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-utils' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:28:in `start'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXConstants-EXConstants' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/gems/3.3.0/gems/bundler-2.5.3/exe/bundle:28:in `block in <top (required)>'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXLocation' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/friendly_errors.rb:117:in `with_friendly_errors'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'glog' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/gems/3.3.0/gems/bundler-2.5.3/exe/bundle:20:in `<top (required)>'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Fabric' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/bin/bundle:25:in `load'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/bin/bundle:25:in `<main>'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoSensors' from project 'Pods')
+/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/interface.rb:163:in `build_failure!': Error building the application - see the log above (FastlaneCore::Interface::FastlaneBuildFailure)
+INFO [2025-09-22 08:00:59.78]: ▸ ::warning file=/Users/runner/work/taroApp/taroApp/ios/Pods/Pods.xcodeproj::The iOS deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 9.0, but the range of supported deployment target versions is 12.0 to 18.5.99. (in target 'react-native-cameraroll-RNCameraRollPrivacyInfo' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/ui.rb:17:in `method_missing'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-cameraroll-RNCameraRollPrivacyInfo' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/error_handler.rb:73:in `handle_build_error'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'fmt' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:114:in `block in build_app'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-nativeconfig' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/command_executor.rb:86:in `execute'
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:110:in `build_app'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTAnimation' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:18:in `run'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTFabric' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/manager.rb:19:in `work'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-slider' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/build_app.rb:68:in `run'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ReactCommon' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:263:in `block (2 levels) in execute_action'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTVibration' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/actions_helper.rb:69:in `execute_action'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-cxxreact' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'FBLazyVector' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `chdir'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-jsi' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-DoubleConversion' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-image-resizer' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'
+	from Fastfile:47:in `block (2 levels) in parsing_binding'
+INFO [2025-09-22 08:00:59.81]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'DoubleConversion' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane.rb:41:in `call'
+INFO [2025-09-22 08:00:59.81]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RCTTypeSafety' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'
+INFO [2025-09-22 08:00:59.82]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'OpenSSL-Universal' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'
+INFO [2025-09-22 08:00:59.82]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXImageLoader' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `execute'
+INFO [2025-09-22 08:00:59.82]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-perflogger' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane'
+INFO [2025-09-22 08:00:59.82]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'SocketRocket' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle'
+INFO [2025-09-22 08:00:59.85]: ▸ ** ARCHIVE FAILED **
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run'
+INFO [2025-09-22 08:00:59.85]: ▸ The following build commands failed:
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call'
+INFO [2025-09-22 08:00:59.88]: ▸ 	Archiving workspace taroApp with scheme taroApp
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run'
+INFO [2025-09-22 08:00:59.88]: ▸ (1 failure)
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command'
+ERROR [2025-09-22 08:00:59.89]: Exit status: 65
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!'
+WARN [2025-09-22 08:00:59.94]: Maybe the error shown is caused by using the wrong version of Xcode
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:363:in `run'
+WARN [2025-09-22 08:00:59.94]: Found multiple versions of Xcode in '/Applications/'
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start'
+WARN [2025-09-22 08:00:59.94]: Make sure you selected the right version for your project
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off'
+WARN [2025-09-22 08:00:59.94]: This build process was executed using '/Applications/Xcode_16.4.app'
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/bin/fastlane:23:in `<top (required)>'
+WARN [2025-09-22 08:00:59.94]: If you want to update your Xcode path, either
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane:25:in `load'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane:25:in `<top (required)>'
+INFO [2025-09-22 08:00:59.94]: - Specify the Xcode version in your Fastfile
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:58:in `load'
+INFO [2025-09-22 08:00:59.94]: ▸ xcversion(version: "8.1") # Selects Xcode 8.1.0
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:58:in `kernel_load'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:23:in `run'
+INFO [2025-09-22 08:00:59.94]: - Specify an absolute path to your Xcode installation in your Fastfile
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:451:in `exec'
+INFO [2025-09-22 08:00:59.94]: ▸ xcode_select "/Applications/Xcode8.app"
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+INFO [2025-09-22 08:00:59.94]: - Manually update the path using
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor.rb:527:in `dispatch'
+INFO [2025-09-22 08:00:59.94]: ▸ sudo xcode-select -s /Applications/Xcode.app
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:34:in `dispatch'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:28:in `start'
++----------------------------------------------+
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/gems/3.3.0/gems/bundler-2.5.3/exe/bundle:28:in `block in <top (required)>'
+|              Build environment               |
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/friendly_errors.rb:117:in `with_friendly_errors'
++---------------+------------------------------+
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/gems/3.3.0/gems/bundler-2.5.3/exe/bundle:20:in `<top (required)>'
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/bin/bundle:25:in `load'
+| xcode_path    | /Applications/Xcode_16.4.app |
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/bin/bundle:25:in `<main>'
+| gym_version   | 2.228.0                      |
+| export_method | app-store                    |
+| sdk           | iPhoneOS18.5.sdk             |
++---------------+------------------------------+
+
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RCTTypeSafety' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'OpenSSL-Universal' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXImageLoader' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-perflogger' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'SocketRocket' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: 
+ERROR [2025-09-22 08:01:00.13]: ⬆️  Check out the few lines of raw `xcodebuild` output above for potential hints on how to solve this error
+WARN [2025-09-22 08:01:00.13]: 📋  For the complete and more detailed error log, check the full log at:
+WARN [2025-09-22 08:01:00.13]: 📋  /Users/runner/Library/Logs/gym/taroApp-taroApp.log
+INFO [2025-09-22 08:01:00.14]: 
+ERROR [2025-09-22 08:01:00.14]: Looks like fastlane ran into a build/archive error with your project
+ERROR [2025-09-22 08:01:00.14]: It's hard to tell what's causing the error, so we wrote some guides on how
+ERROR [2025-09-22 08:01:00.14]: to troubleshoot build and signing issues: https://docs.fastlane.tools/codesigning/getting-started/
+ERROR [2025-09-22 08:01:00.14]: Before submitting an issue on GitHub, please follow the guide above and make
+ERROR [2025-09-22 08:01:00.14]: sure your project is set up correctly.
+ERROR [2025-09-22 08:01:00.14]: fastlane uses `xcodebuild` commands to generate your binary, you can see the
+ERROR [2025-09-22 08:01:00.14]: the full commands printed out in yellow in the above log.
+ERROR [2025-09-22 08:01:00.14]: Make sure to inspect the output above, as usually you'll find more error information there
+INFO [2025-09-22 08:01:00.14]: 
+WARN [2025-09-22 08:01:00.14]: Lane Context:
+INFO [2025-09-22 08:01:00.14]: {:DEFAULT_PLATFORM=>:ios, :PLATFORM_NAME=>:ios, :LANE_NAME=>"ios ios_build", :VERSION_NUMBER=>"2.9.0", :BUILD_NUMBER=>"23"}
+ERROR [2025-09-22 08:01:00.14]: Called from Fastfile at line 47
+ERROR [2025-09-22 08:01:00.14]: ```
+ERROR [2025-09-22 08:01:00.14]:     45:	    
+ERROR [2025-09-22 08:01:00.14]:     46:	    # 使用 gym 来构建和导出 - 指定输出目录
+ERROR [2025-09-22 08:01:00.14]:  => 47:	    gym(
+ERROR [2025-09-22 08:01:00.14]:     48:	      workspace: "taroApp.xcworkspace",
+ERROR [2025-09-22 08:01:00.14]:     49:	      scheme: "taroApp",
+ERROR [2025-09-22 08:01:00.14]: ```
+ERROR [2025-09-22 08:01:00.14]: Error building the application - see the log above
+INFO [2025-09-22 08:01:00.15]: Successfully generated documentation at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/README.md'
+
++-----------------------------------------------------------+
+|                     fastlane summary                      |
++------+--------------------------------------+-------------+
+| Step | Action                               | Time (in s) |
++------+--------------------------------------+-------------+
+| 1    | default_platform                     | 0           |
+| 2    | update_app_identifier                | 0           |
+| 3    | update_info_plist                    | 0           |
+| 4    | increment_version_number             | 2           |
+| 5    | increment_build_number               | 0           |
+| 6    | Switch to ios export_method_for lane | 0           |
+| 💥   | gym                                  | 41          |
++------+--------------------------------------+-------------+
+
+ERROR [2025-09-22 08:01:00.28]: fastlane finished with errors
+52s
+Run echo "🚀 Starting iOS build with detailed logging..."
+🚀 Starting iOS build with detailed logging...
+/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/highline-2.0.3/lib/highline.rb:17: warning: abbrev was loaded from the standard library, but will no longer be part of the default gems since Ruby 3.4.0. Add abbrev to your Gemfile or gemspec. Also contact author of highline-2.0.3 to add abbrev into its gemspec.
+DEBUG [2025-09-22 08:00:14.83]: Checking if there are any plugins that should be loaded...
+Successfully loaded Appfile at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/Appfile'
+-------
+Successfully loaded Appfile at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/Appfile'
+-------
+INFO [2025-09-22 08:00:15.38]: Sending anonymous analytics information
+INFO [2025-09-22 08:00:15.38]: Learn more at https://docs.fastlane.tools/#metrics
+INFO [2025-09-22 08:00:15.38]: No personal or sensitive data is sent.
+INFO [2025-09-22 08:00:15.38]: You can disable this by adding `opt_out_usage` at the top of your Fastfile
+INFO [2025-09-22 08:00:15.42]: ------------------------------
+INFO [2025-09-22 08:00:15.42]: --- Step: default_platform ---
+INFO [2025-09-22 08:00:15.42]: ------------------------------
+INFO [2025-09-22 08:00:15.42]: Driving the lane 'ios ios_build' 🚀
+Successfully loaded Appfile at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/Appfile'
+-------
+Successfully loaded Appfile at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/Appfile'
+-------
+INFO [2025-09-22 08:00:15.42]: -----------------------------------
+INFO [2025-09-22 08:00:15.42]: --- Step: update_app_identifier ---
+INFO [2025-09-22 08:00:15.42]: -----------------------------------
+INFO [2025-09-22 08:00:15.59]: Updated taroApp.xcodeproj 💾.
+INFO [2025-09-22 08:00:15.59]: -------------------------------
+INFO [2025-09-22 08:00:15.59]: --- Step: update_info_plist ---
+INFO [2025-09-22 08:00:15.59]: -------------------------------
+INFO [2025-09-22 08:00:15.61]: Updated taroApp.xcodeproj/../taroApp/Info.plist 💾.
+INFO [2025-09-22 08:00:15.61]: --------------------------------------
+INFO [2025-09-22 08:00:15.61]: --- Step: increment_version_number ---
+INFO [2025-09-22 08:00:15.61]: --------------------------------------
+INFO [2025-09-22 08:00:15.61]: $ cd /Users/runner/work/taroApp/taroApp/ios && agvtool what-marketing-version -terse1
+INFO [2025-09-22 08:00:17.93]: ▸ $(MARKETING_VERSION)
+DEBUG [2025-09-22 08:00:17.93]: Your current version ($(MARKETING_VERSION)) does not respect the format A or A.B or A.B.C
+INFO [2025-09-22 08:00:17.94]: $ cd /Users/runner/work/taroApp/taroApp/ios && agvtool new-marketing-version 2.9.0
+INFO [2025-09-22 08:00:18.18]: ▸ Setting CFBundleShortVersionString of project taroApp to:
+INFO [2025-09-22 08:00:18.18]: ▸ 2.9.0.
+INFO [2025-09-22 08:00:18.20]: ▸ Updating CFBundleShortVersionString in Info.plist(s)...
+INFO [2025-09-22 08:00:18.25]: ▸ Updated CFBundleShortVersionString in "taroApp.xcodeproj/../taroApp/Info.plist" to 2.9.0
+INFO [2025-09-22 08:00:18.28]: ▸ Updated CFBundleShortVersionString in "taroApp.xcodeproj/../taroAppTests/Info.plist" to 2.9.0
+INFO [2025-09-22 08:00:18.29]: ------------------------------------
+INFO [2025-09-22 08:00:18.29]: --- Step: increment_build_number ---
+INFO [2025-09-22 08:00:18.29]: ------------------------------------
+Current version of project taroApp is: 
+    1
+
+/Users/runner/work/taroApp/taroApp/ios
+INFO [2025-09-22 08:00:18.47]: $ cd /Users/runner/work/taroApp/taroApp/ios && agvtool new-version -all 23 && cd -
+INFO [2025-09-22 08:00:18.62]: ▸ Setting version of project taroApp to:
+INFO [2025-09-22 08:00:18.62]: ▸ 23.
+INFO [2025-09-22 08:00:18.64]: ▸ Also setting CFBundleVersion key (assuming it exists)
+INFO [2025-09-22 08:00:18.69]: ▸ Updating CFBundleVersion in Info.plist(s)...
+INFO [2025-09-22 08:00:18.74]: ▸ Updated CFBundleVersion in "taroApp.xcodeproj/../taroApp/Info.plist" to 23
+INFO [2025-09-22 08:00:18.77]: ▸ Updated CFBundleVersion in "taroApp.xcodeproj/../taroAppTests/Info.plist" to 23
+INFO [2025-09-22 08:00:18.77]: ▸ /Users/runner/work/taroApp/taroApp/ios
+INFO [2025-09-22 08:00:18.77]: --------------------------------------------------
+INFO [2025-09-22 08:00:18.77]: --- Step: Switch to ios export_method_for lane ---
+INFO [2025-09-22 08:00:18.77]: --------------------------------------------------
+INFO [2025-09-22 08:00:18.77]: Cruising over to lane 'ios export_method_for' 🚖
+INFO [2025-09-22 08:00:18.77]: Cruising back to lane 'ios ios_build' 🚘
+INFO [2025-09-22 08:00:18.81]: -----------------
+INFO [2025-09-22 08:00:18.81]: --- Step: gym ---
+INFO [2025-09-22 08:00:18.81]: -----------------
+WARN [2025-09-22 08:00:18.83]: Resolving Swift Package Manager dependencies...
+INFO [2025-09-22 08:00:18.83]: $ xcodebuild -resolvePackageDependencies -workspace taroApp.xcworkspace -scheme taroApp
+INFO [2025-09-22 08:00:19.58]: ▸ Command line invocation:
+INFO [2025-09-22 08:00:19.58]: ▸     /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild -resolvePackageDependencies -workspace taroApp.xcworkspace -scheme taroApp
+INFO [2025-09-22 08:00:21.56]: ▸ resolved source packages: 
+INFO [2025-09-22 08:00:21.87]: $ xcodebuild -showBuildSettings -workspace taroApp.xcworkspace -scheme taroApp 2>&1
+WARN [2025-09-22 08:00:25.00]: Command timed out after 3 seconds on try 1 of 4, trying again with a 6 second timeout...
+DEBUG [2025-09-22 08:00:29.69]: Parsing project file '/Users/runner/work/taroApp/taroApp/ios/taroApp.xcodeproj' to find selected provisioning profiles
+DEBUG [2025-09-22 08:00:29.69]: Finding provision profiles for 'Release'
+DEBUG [2025-09-22 08:00:29.73]: Merging provisioning profile mappings
+DEBUG [2025-09-22 08:00:29.73]: -------------------------------------
+DEBUG [2025-09-22 08:00:29.73]: Primary provisioning profile mapping:
+DEBUG [2025-09-22 08:00:29.73]: {}
+DEBUG [2025-09-22 08:00:29.73]: Secondary provisioning profile mapping:
+DEBUG [2025-09-22 08:00:29.73]: {:"com.bto.Light"=>"BTOLIGHT"}
+DEBUG [2025-09-22 08:00:29.73]: Resulting in the following mapping:
+DEBUG [2025-09-22 08:00:29.73]: {:"com.bto.Light"=>"BTOLIGHT"}
+INFO [2025-09-22 08:00:29.73]: Detected provisioning profile mapping: {:"com.bto.Light"=>"BTOLIGHT"}
+
++---------------------------------------------------------------------------------------------------------------+
+|                                            Summary for gym 2.228.0                                            |
++---------------------------------------------------+-----------------------------------------------------------+
+| workspace                                         | taroApp.xcworkspace                                       |
+| scheme                                            | taroApp                                                   |
+| export_method                                     | app-store                                                 |
+| output_directory                                  | ./build                                                   |
+| output_name                                       | taroApp                                                   |
+| export_options.provisioningProfiles.com.bto.Light | BTOLIGHT                                                  |
+| export_options.signingStyle                       | manual                                                    |
+| export_options.teamID                             | ***                                                |
+| export_options.signingCertificate                 | Apple Distribution                                        |
+| export_options.provisioningProfiles.com.bto.Light | BTOLIGHT                                                  |
+| export_xcargs                                     | -allowProvisioningUpdates                                 |
+| clean                                             | true                                                      |
+| silent                                            | false                                                     |
+| skip_package_ipa                                  | false                                                     |
+| skip_package_pkg                                  | false                                                     |
+| build_path                                        | /Users/runner/Library/Developer/Xcode/Archives/2025-09-22 |
+| result_bundle                                     | false                                                     |
+| buildlog_path                                     | ~/Library/Logs/gym                                        |
+| destination                                       | generic/platform=iOS                                      |
+| xcodebuild_formatter                              | xcbeautify                                                |
+| build_timing_summary                              | false                                                     |
+| skip_profile_detection                            | false                                                     |
+| xcodebuild_command                                | xcodebuild                                                |
+| skip_package_dependencies_resolution              | false                                                     |
+| disable_package_automatic_updates                 | false                                                     |
+| use_system_scm                                    | false                                                     |
+| xcode_path                                        | /Applications/Xcode_16.4.app                              |
++---------------------------------------------------+-----------------------------------------------------------+
+
++---------------------------------------------------------------------------------------------------------------------------------------+
+|                                                        Generated Build Command                                                        |
++----------------------------------------------------------------------------------------------------------------+----------------------+
+| Option                                                                                                         | Value                |
++----------------------------------------------------------------------------------------------------------------+----------------------+
+| set -o pipefail &&                                                                                             |                      |
+| xcodebuild                                                                                                     |                      |
+| -workspace taroApp.xcworkspace                                                                                 |                      |
+| -scheme taroApp                                                                                                |                      |
+| -destination                                                                                                   | generic/platform=iOS |
+| -archivePath /Users/runner/Library/Developer/Xcode/Archives/2025-09-22/taroApp\ 2025-09-22\ 08.00.29.xcarchive |                      |
+| clean                                                                                                          |                      |
+| archive                                                                                                        |                      |
+| | tee /Users/runner/Library/Logs/gym/taroApp-taroApp.log                                                       |                      |
+| | xcbeautify                                                                                                   |                      |
++----------------------------------------------------------------------------------------------------------------+----------------------+
+INFO [2025-09-22 08:00:29.79]: $ set -o pipefail && xcodebuild -workspace taroApp.xcworkspace -scheme taroApp -destination 'generic/platform=iOS' -archivePath /Users/runner/Library/Developer/Xcode/Archives/2025-09-22/taroApp\ 2025-09-22\ 08.00.29.xcarchive clean archive | tee /Users/runner/Library/Logs/gym/taroApp-taroApp.log | xcbeautify
+INFO [2025-09-22 08:00:29.85]: ▸ ----- xcbeautify -----
+INFO [2025-09-22 08:00:29.85]: ▸ Version: 2.30.1
+INFO [2025-09-22 08:00:29.85]: ▸ ----------------------
+INFO [2025-09-22 08:00:37.03]: ▸ Clean Succeeded
+INFO [2025-09-22 08:00:41.77]: ▸ note: Building targets in dependency order
+INFO [2025-09-22 08:00:41.80]: ▸ note: Target dependency graph (99 targets)
+INFO [2025-09-22 08:00:59.67]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-rncore' from project 'Pods')
+INFO [2025-09-22 08:00:59.67]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXConstants' from project 'Pods')
+INFO [2025-09-22 08:00:59.67]: ▸ ::warning ::Run script build phase '[CP-User] Generate app.config for prebuilt Constants.manifest' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'EXConstants' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-callinvoker' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-logger' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-jserrorhandler' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-FabricImage' from project 'Pods')
+INFO [2025-09-22 08:00:59.68]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Yoga' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'hermes-engine' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ ::warning ::Run script build phase '[CP-User] [Hermes] Replace Hermes for the right configuration, if needed' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'hermes-engine' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-runtimescheduler' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-Folly' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoKeepAwake' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-PeerTalk' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTNetwork' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-netinfo' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-graphics' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'FlipperKit' from project 'Pods')
+INFO [2025-09-22 08:00:59.69]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RCTRequired' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-hermes' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNSVG' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNDeviceInfo' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNGestureHandler' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'CocoaAsyncSocket' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoCamera' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'boost' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Expo' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXAV' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-ImageManager' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RCT-Folly' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-NativeModulesApple' from project 'Pods')
+INFO [2025-09-22 08:00:59.70]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-rendererdebug' from project 'Pods')
+INFO [2025-09-22 08:00:59.71]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-webview' from project 'Pods')
+INFO [2025-09-22 08:00:59.71]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoFileSystem-ExpoFileSystem_privacy' from project 'Pods')
+bundler: failed to load command: fastlane (/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane)
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXConstants-ExpoConstants_privacy' from project 'Pods')
+/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/interface.rb:163:in `build_failure!': [!] Error building the application - see the log above (FastlaneCore::Interface::FastlaneBuildFailure)
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTImage' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/ui.rb:17:in `method_missing'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-Fmt' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/error_handler.rb:73:in `handle_build_error'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-CoreModules' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:114:in `block in build_app'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTLinking' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/command_executor.rb:86:in `execute'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Core' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:110:in `build_app'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTText' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:18:in `run'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'FBReactNativeSpec' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/manager.rb:19:in `work'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTActionSheet' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/build_app.rb:68:in `run'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNCClipboard' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:263:in `block (2 levels) in execute_action'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-safe-area-context' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/actions_helper.rb:69:in `execute_action'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNCAsyncStorage' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'libevent' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `chdir'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-debug' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-pager-view' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-jsiexecutor' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-Glog' from project 'Pods')
+	from Fastfile:47:in `block (2 levels) in parsing_binding'
+INFO [2025-09-22 08:00:59.72]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-cameraroll' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane.rb:41:in `call'
+INFO [2025-09-22 08:00:59.73]: ▸ ::warning file=/Users/runner/work/taroApp/taroApp/ios/Pods/Pods.xcodeproj::The iOS deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 9.0, but the range of supported deployment target versions is 12.0 to 18.5.99. (in target 'RNDeviceInfo-RNDeviceInfoPrivacyInfo' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNDeviceInfo-RNDeviceInfoPrivacyInfo' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTBlob' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `execute'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTAppDelegate' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTSettings' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Mapbuffer' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-geolocation' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNScreens' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RNCPicker' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Codegen' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-runtimeexecutor' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoFileSystem' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:363:in `run'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoImagePicker' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoModulesCore' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXBarCodeScanner' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/bin/fastlane:23:in `<top (required)>'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXFont' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane:25:in `load'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-jsinspector' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane:25:in `<top (required)>'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ZXingObjC' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:58:in `load'
+INFO [2025-09-22 08:00:59.73]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoBrightness' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:58:in `kernel_load'
+INFO [2025-09-22 08:00:59.74]: ▸ ::error file=/Users/runner/work/taroApp/taroApp/ios/taroApp.xcodeproj::Signing for "taroApp" requires a development team. Select a development team in the Signing & Capabilities editor. (in target 'taroApp' from project 'taroApp')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:23:in `run'
+INFO [2025-09-22 08:00:59.74]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'taroApp' from project 'taroApp')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:451:in `exec'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Run script build phase '[Expo] Configure project' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'taroApp' from project 'taroApp')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+INFO [2025-09-22 08:00:59.78]: ▸ ::warning ::Run script build phase 'Bundle React Native code and images' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'taroApp' from project 'taroApp')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Core-RCTI18nStrings' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor.rb:527:in `dispatch'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Pods-taroApp' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:34:in `dispatch'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-Boost-iOSX' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-utils' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:28:in `start'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXConstants-EXConstants' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/gems/3.3.0/gems/bundler-2.5.3/exe/bundle:28:in `block in <top (required)>'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXLocation' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/friendly_errors.rb:117:in `with_friendly_errors'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'glog' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/gems/3.3.0/gems/bundler-2.5.3/exe/bundle:20:in `<top (required)>'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-Fabric' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/bin/bundle:25:in `load'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React' from project 'Pods')
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/bin/bundle:25:in `<main>'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ExpoSensors' from project 'Pods')
+/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/interface.rb:163:in `build_failure!': Error building the application - see the log above (FastlaneCore::Interface::FastlaneBuildFailure)
+INFO [2025-09-22 08:00:59.78]: ▸ ::warning file=/Users/runner/work/taroApp/taroApp/ios/Pods/Pods.xcodeproj::The iOS deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 9.0, but the range of supported deployment target versions is 12.0 to 18.5.99. (in target 'react-native-cameraroll-RNCameraRollPrivacyInfo' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/ui.rb:17:in `method_missing'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-cameraroll-RNCameraRollPrivacyInfo' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/error_handler.rb:73:in `handle_build_error'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'fmt' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:114:in `block in build_app'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-nativeconfig' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/command_executor.rb:86:in `execute'
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:110:in `build_app'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTAnimation' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/runner.rb:18:in `run'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTFabric' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/gym/lib/gym/manager.rb:19:in `work'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-slider' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/build_app.rb:68:in `run'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'ReactCommon' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:263:in `block (2 levels) in execute_action'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-RCTVibration' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/actions/actions_helper.rb:69:in `execute_action'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-cxxreact' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'FBLazyVector' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `chdir'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-jsi' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Flipper-DoubleConversion' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'
+INFO [2025-09-22 08:00:59.78]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'react-native-image-resizer' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'
+	from Fastfile:47:in `block (2 levels) in parsing_binding'
+INFO [2025-09-22 08:00:59.81]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'DoubleConversion' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane.rb:41:in `call'
+INFO [2025-09-22 08:00:59.81]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RCTTypeSafety' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'
+INFO [2025-09-22 08:00:59.82]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'OpenSSL-Universal' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'
+INFO [2025-09-22 08:00:59.82]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXImageLoader' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/runner.rb:45:in `execute'
+INFO [2025-09-22 08:00:59.82]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-perflogger' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane'
+INFO [2025-09-22 08:00:59.82]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'SocketRocket' from project 'Pods')
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle'
+INFO [2025-09-22 08:00:59.85]: ▸ ** ARCHIVE FAILED **
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run'
+INFO [2025-09-22 08:00:59.85]: ▸ The following build commands failed:
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call'
+INFO [2025-09-22 08:00:59.88]: ▸ 	Archiving workspace taroApp with scheme taroApp
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run'
+INFO [2025-09-22 08:00:59.88]: ▸ (1 failure)
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command'
+ERROR [2025-09-22 08:00:59.89]: Exit status: 65
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!'
+WARN [2025-09-22 08:00:59.94]: Maybe the error shown is caused by using the wrong version of Xcode
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:363:in `run'
+WARN [2025-09-22 08:00:59.94]: Found multiple versions of Xcode in '/Applications/'
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start'
+WARN [2025-09-22 08:00:59.94]: Make sure you selected the right version for your project
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off'
+WARN [2025-09-22 08:00:59.94]: This build process was executed using '/Applications/Xcode_16.4.app'
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/fastlane-2.228.0/bin/fastlane:23:in `<top (required)>'
+WARN [2025-09-22 08:00:59.94]: If you want to update your Xcode path, either
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane:25:in `load'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/bin/fastlane:25:in `<top (required)>'
+INFO [2025-09-22 08:00:59.94]: - Specify the Xcode version in your Fastfile
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:58:in `load'
+INFO [2025-09-22 08:00:59.94]: ▸ xcversion(version: "8.1") # Selects Xcode 8.1.0
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:58:in `kernel_load'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli/exec.rb:23:in `run'
+INFO [2025-09-22 08:00:59.94]: - Specify an absolute path to your Xcode installation in your Fastfile
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:451:in `exec'
+INFO [2025-09-22 08:00:59.94]: ▸ xcode_select "/Applications/Xcode8.app"
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/command.rb:28:in `run'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'
+INFO [2025-09-22 08:00:59.94]: - Manually update the path using
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor.rb:527:in `dispatch'
+INFO [2025-09-22 08:00:59.94]: ▸ sudo xcode-select -s /Applications/Xcode.app
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:34:in `dispatch'
+INFO [2025-09-22 08:00:59.94]: 
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/vendor/thor/lib/thor/base.rb:584:in `start'
+
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/cli.rb:28:in `start'
++----------------------------------------------+
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/gems/3.3.0/gems/bundler-2.5.3/exe/bundle:28:in `block in <top (required)>'
+|              Build environment               |
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/3.3.0/bundler/friendly_errors.rb:117:in `with_friendly_errors'
++---------------+------------------------------+
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/lib/ruby/gems/3.3.0/gems/bundler-2.5.3/exe/bundle:20:in `<top (required)>'
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/bin/bundle:25:in `load'
+| xcode_path    | /Applications/Xcode_16.4.app |
+	from /Users/runner/hostedtoolcache/Ruby/3.3.0/arm64/bin/bundle:25:in `<main>'
+| gym_version   | 2.228.0                      |
+| export_method | app-store                    |
+| sdk           | iPhoneOS18.5.sdk             |
++---------------+------------------------------+
+
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'RCTTypeSafety' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'OpenSSL-Universal' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'EXImageLoader' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'React-perflogger' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: ▸ note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'SocketRocket' from project 'Pods')
+INFO [2025-09-22 08:01:00.13]: 
+ERROR [2025-09-22 08:01:00.13]: ⬆️  Check out the few lines of raw `xcodebuild` output above for potential hints on how to solve this error
+WARN [2025-09-22 08:01:00.13]: 📋  For the complete and more detailed error log, check the full log at:
+WARN [2025-09-22 08:01:00.13]: 📋  /Users/runner/Library/Logs/gym/taroApp-taroApp.log
+INFO [2025-09-22 08:01:00.14]: 
+ERROR [2025-09-22 08:01:00.14]: Looks like fastlane ran into a build/archive error with your project
+ERROR [2025-09-22 08:01:00.14]: It's hard to tell what's causing the error, so we wrote some guides on how
+ERROR [2025-09-22 08:01:00.14]: to troubleshoot build and signing issues: https://docs.fastlane.tools/codesigning/getting-started/
+ERROR [2025-09-22 08:01:00.14]: Before submitting an issue on GitHub, please follow the guide above and make
+ERROR [2025-09-22 08:01:00.14]: sure your project is set up correctly.
+ERROR [2025-09-22 08:01:00.14]: fastlane uses `xcodebuild` commands to generate your binary, you can see the
+ERROR [2025-09-22 08:01:00.14]: the full commands printed out in yellow in the above log.
+ERROR [2025-09-22 08:01:00.14]: Make sure to inspect the output above, as usually you'll find more error information there
+INFO [2025-09-22 08:01:00.14]: 
+WARN [2025-09-22 08:01:00.14]: Lane Context:
+INFO [2025-09-22 08:01:00.14]: {:DEFAULT_PLATFORM=>:ios, :PLATFORM_NAME=>:ios, :LANE_NAME=>"ios ios_build", :VERSION_NUMBER=>"2.9.0", :BUILD_NUMBER=>"23"}
+ERROR [2025-09-22 08:01:00.14]: Called from Fastfile at line 47
+ERROR [2025-09-22 08:01:00.14]: ```
+ERROR [2025-09-22 08:01:00.14]:     45:	    
+ERROR [2025-09-22 08:01:00.14]:     46:	    # 使用 gym 来构建和导出 - 指定输出目录
+ERROR [2025-09-22 08:01:00.14]:  => 47:	    gym(
+ERROR [2025-09-22 08:01:00.14]:     48:	      workspace: "taroApp.xcworkspace",
+ERROR [2025-09-22 08:01:00.14]:     49:	      scheme: "taroApp",
+ERROR [2025-09-22 08:01:00.14]: ```
+ERROR [2025-09-22 08:01:00.14]: Error building the application - see the log above
+INFO [2025-09-22 08:01:00.15]: Successfully generated documentation at path '/Users/runner/work/taroApp/taroApp/ios/fastlane/README.md'
+
++-----------------------------------------------------------+
+|                     fastlane summary                      |
++------+--------------------------------------+-------------+
+| Step | Action                               | Time (in s) |
++------+--------------------------------------+-------------+
+| 1    | default_platform                     | 0           |
+| 2    | update_app_identifier                | 0           |
+| 3    | update_info_plist                    | 0           |
+| 4    | increment_version_number             | 2           |
+| 5    | increment_build_number               | 0           |
+| 6    | Switch to ios export_method_for lane | 0           |
+| 💥   | gym                                  | 41          |
++------+--------------------------------------+-------------+
+
+ERROR [2025-09-22 08:01:00.28]: fastlane finished with errors
+Error: Process completed with exit code 1.
+0s
+0s
+5s
+Run bundle exec fastlane testflight_upload
+/Users/runner/work/taroApp/taroApp/vendor/bundle/ruby/3.3.0/gems/highline-2.0.3/lib/highline.rb:17: warning: abbrev was loaded from the standard library, but will no longer be part of the default gems since Ruby 3.4.0. Add abbrev to your Gemfile or gemspec. Also contact author of highline-2.0.3 to add abbrev into its gemspec.
+[08:01:07]: ------------------------------
+[08:01:07]: --- Step: default_platform ---
+
+[08:01:07]: ------------------------------
+[!] No IPA file found. Please run ios_build lane first.
+[08:01:07]: Driving the lane 'ios testflight_upload' 🚀
++------------------------------------------+
+|               Lane Context               |
++------------------+-----------------------+
+| DEFAULT_PLATFORM | ios                   |
+| PLATFORM_NAME    | ios                   |
+| LANE_NAME        | ios testflight_upload |
++------------------+-----------------------+
+[08:01:07]: Called from Fastfile at line 92
+[08:01:07]: ```
+[08:01:07]:     90:	    
+[08:01:07]:     91:	    if ipa_path.nil?
+[08:01:07]:  => 92:	      UI.user_error!("No IPA file found. Please run ios_build lane first.")
+[08:01:07]:     93:	    end
+[08:01:07]:     94:	    
+[08:01:07]: ```
+[08:01:07]: No IPA file found. Please run ios_build lane first.
+
++-----------------------------------------------------------+
+|                     fastlane summary                      |
++------+--------------------------------------+-------------+
+| Step | Action                               | Time (in s) |
++------+--------------------------------------+-------------+
+| 1    | default_platform                     | 0           |
+| 2    | update_app_identifier                | 0           |
+| 3    | update_info_plist                    | 0           |
+| 4    | increment_version_number             | 2           |
+| 5    | increment_build_number               | 0           |
+| 6    | Switch to ios export_method_for lane | 0           |
+| 💥   | gym                                  | 41          |
++------+--------------------------------------+-------------+
+
+ERROR [2025-09-22 08:01:00.28]: fastlane finished with errors
+Error: Process completed with exit code 1.
