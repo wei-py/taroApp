@@ -1,63 +1,342 @@
-# ios/fastlane/Fastfile
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#     https://docs.fastlane.tools/plugins/available-plugins
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+# 禁用使用统计
+opt_out_usage
 
 default_platform(:ios)
 
 platform :ios do
-  desc "构建 React Native iOS 应用"
-  lane :build do
-    # Step 1: 安装 JS 依赖 (pnpm)
-    sh("cd .. && pnpm install")
+  # 环境变量配置
+  APP_ID = ENV["APP_ID"] || "com.bto.Light"
+  APP_NAME = ENV["APP_NAME"] || "BTOLIGHT"
+  SCHEME_NAME = ENV["SCHEME_NAME"] || "taroApp"
+  VERSION_NUMBER = ENV["VERSION_NUMBER"] || "1.0.0"
+  BUILD_NUMBER = ENV["BUILD_NUMBER"] || Time.now.strftime("%Y%m%d%H%M")
+  TEAM_ID = ENV["TEAM_ID"]
+  PROVISIONING_PROFILE_SPECIFIER = ENV["PROVISIONING_PROFILE_SPECIFIER"]
+  CODE_SIGN_IDENTITY = ENV["CODE_SIGN_IDENTITY"] || "Apple Distribution"
+  
+  # App Store Connect API 配置
+  API_KEY_ID = ENV["APP_STORE_CONNECT_API_KEY_ID"]
+  ISSUER_ID = ENV["APP_STORE_CONNECT_ISSUER_ID"]
+  
+  before_all do
+    # 在 CI 环境中跳过 Git 检查
+    unless ENV["SKIP_GIT_CHECK"] == "true" || ENV["CI"]
+      ensure_git_status_clean
+    end
+    
+    # 设置 App Store Connect API Key
+    setup_app_store_connect_api_key if API_KEY_ID && ISSUER_ID
+    
+    # 显示构建信息
+    UI.header "🚀 开始构建 iOS 应用"
+    UI.message "📱 应用名称: #{APP_NAME}"
+    UI.message "🆔 Bundle ID: #{APP_ID}"
+    UI.message "🏷️ 版本号: #{VERSION_NUMBER}"
+    UI.message "🔢 构建号: #{BUILD_NUMBER}"
+    UI.message "👥 团队 ID: #{TEAM_ID}"
+  end
 
-    # Step 2: 生成 JS Bundle
-    sh("cd .. && npx react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios")
-
-    # Step 3: 安装 Pods（如果还没装）
-    sh("cd ios && pod install")
-
-    # Step 4: 解锁钥匙串（CI 需要）
-    unlock_keychain(
-      path: "/Users/runner/Library/Keychains/login.keychain-db",
-      password: "" # GitHub Actions macOS runner 默认无密码
+  desc "🧪 运行测试"
+  lane :test do
+    run_tests(
+      scheme: SCHEME_NAME,
+      device: "iPhone 15",
+      clean: true,
+      code_coverage: true,
+      skip_build: false,
+      result_bundle: true,
+      output_directory: "./test_output"
     )
+  end
 
-    # Step 5: 启用自动签名（确保 Xcode 项目中也是自动签名）
-    update_code_signing_settings(
-      use_automatic_signing: true,
-      path: "./taroApp.xcodeproj",
-      targets: ["taroApp"] # 替换为你的 target 名
+  desc "🚀 构建并发布到 App Store"
+  lane :release do
+    # 更新版本信息
+    update_app_version
+    
+    # 构建应用
+    build_app_store_version
+    
+    # 上传到 App Store Connect
+    upload_to_app_store_connect
+    
+    # 发送通知
+    notify_success("✅ #{APP_NAME} 已成功发布到 App Store Connect")
+  end
+
+  desc "🧪 构建测试版本"
+  lane :beta do
+    # 更新版本信息
+    update_app_version
+    
+    # 构建 TestFlight 版本
+    build_testflight_version
+    
+    # 上传到 TestFlight
+    upload_to_testflight
+    
+    # 发送通知
+    notify_success("✅ #{APP_NAME} 测试版本已上传到 TestFlight")
+  end
+
+  desc "🏗️ 仅构建应用"
+  lane :build_only do
+    update_app_version
+    build_app_store_version
+    notify_success("✅ #{APP_NAME} 构建完成")
+  end
+
+  desc "📋 更新应用版本信息"
+  private_lane :update_app_version do
+    UI.header "📋 更新版本信息"
+    
+    # 更新版本号
+    increment_version_number(
+      version_number: VERSION_NUMBER,
+      xcodeproj: "#{SCHEME_NAME}.xcodeproj"
     )
+    
+    # 更新构建号
+    increment_build_number(
+      build_number: BUILD_NUMBER,
+      xcodeproj: "#{SCHEME_NAME}.xcodeproj"
+    )
+    
+    UI.success "版本号已更新为: #{VERSION_NUMBER}"
+    UI.success "构建号已更新为: #{BUILD_NUMBER}"
+  end
 
-    # Step 6: 登录 Apple Developer 账号（用于自动管理证书/描述文件）
+  desc "🏗️ 构建 App Store 版本"
+  private_lane :build_app_store_version do
+    UI.header "🏗️ 构建 App Store 版本"
+    
+    # 清理构建缓存
+    cleanup_build_files
+    
+    # 构建应用
+    build_app(
+      scheme: SCHEME_NAME,
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          APP_ID => PROVISIONING_PROFILE_SPECIFIER
+        },
+        signingStyle: "manual",
+        teamID: TEAM_ID,
+        compileBitcode: false,
+        uploadBitcode: false,
+        uploadSymbols: true,
+        manageAppVersionAndBuildNumber: false,
+        destination: "export"
+      },
+      output_directory: "./build",
+      output_name: "#{APP_NAME}_#{VERSION_NUMBER}_#{BUILD_NUMBER}_AppStore.ipa",
+      clean: true,
+      include_symbols: true,
+      include_bitcode: false,
+      silent: false,
+      suppress_xcode_output: false
+    )
+    
+    UI.success "App Store 版本构建完成: #{lane_context[SharedValues::IPA_OUTPUT_PATH]}"
+  end
+
+  desc "🧪 构建 TestFlight 版本"
+  private_lane :build_testflight_version do
+    UI.header "🧪 构建 TestFlight 版本"
+    
+    # 清理构建缓存
+    cleanup_build_files
+    
+    # 构建应用
+    build_app(
+      scheme: SCHEME_NAME,
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          APP_ID => PROVISIONING_PROFILE_SPECIFIER
+        },
+        signingStyle: "manual",
+        teamID: TEAM_ID,
+        compileBitcode: false,
+        uploadBitcode: false,
+        uploadSymbols: true,
+        manageAppVersionAndBuildNumber: false,
+        destination: "export"
+      },
+      output_directory: "./build",
+      output_name: "#{APP_NAME}_#{VERSION_NUMBER}_#{BUILD_NUMBER}_TestFlight.ipa",
+      clean: true,
+      include_symbols: true,
+      include_bitcode: false
+    )
+    
+    UI.success "TestFlight 版本构建完成: #{lane_context[SharedValues::IPA_OUTPUT_PATH]}"
+  end
+
+  desc "📤 上传到 App Store Connect"
+  private_lane :upload_to_app_store_connect do
+    UI.header "📤 上传到 App Store Connect"
+    
+    begin
+      upload_to_app_store(
+        ipa: lane_context[SharedValues::IPA_OUTPUT_PATH],
+        skip_screenshots: true,
+        skip_metadata: true,
+        skip_app_version_update: true,
+        force: true,
+        precheck_include_in_app_purchases: false,
+        submit_for_review: false,
+        automatic_release: false,
+        platform: "ios",
+        verify_only: false
+      )
+      
+      UI.success "应用已成功上传到 App Store Connect"
+    rescue => exception
+      UI.error "上传到 App Store Connect 失败: #{exception.message}"
+      notify_failure("❌ #{APP_NAME} 上传到 App Store Connect 失败: #{exception.message}")
+      raise exception
+    end
+  end
+
+  desc "🧪 上传到 TestFlight"
+  private_lane :upload_to_testflight do
+    UI.header "🧪 上传到 TestFlight"
+    
+    begin
+      upload_to_testflight(
+        ipa: lane_context[SharedValues::IPA_OUTPUT_PATH],
+        skip_submission: false,
+        skip_waiting_for_build_processing: false,
+        notify_external_testers: false,
+        changelog: "自动构建版本 #{VERSION_NUMBER} (#{BUILD_NUMBER})",
+        beta_app_description: "#{APP_NAME} 测试版本",
+        beta_app_feedback_email: ENV["BETA_FEEDBACK_EMAIL"],
+        distribute_external: false
+      )
+      
+      UI.success "应用已成功上传到 TestFlight"
+    rescue => exception
+      UI.error "上传到 TestFlight 失败: #{exception.message}"
+      notify_failure("❌ #{APP_NAME} 上传到 TestFlight 失败: #{exception.message}")
+      raise exception
+    end
+  end
+
+  desc "🔑 设置 App Store Connect API Key"
+  private_lane :setup_app_store_connect_api_key do
     app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      key_id: API_KEY_ID,
+      issuer_id: ISSUER_ID,
+      key_filepath: "~/.appstoreconnect/private_keys/AuthKey_#{API_KEY_ID}.p8",
       duration: 1200,
       in_house: false
     )
+    UI.success "App Store Connect API Key 配置完成"
+  end
 
-    # 或者用 Apple ID 登录（简单但安全性较低）
-    # appstore_login
+  desc "🧹 清理构建文件"
+  private_lane :cleanup_build_files do
+    UI.header "🧹 清理构建文件"
+    
+    # 清理 Xcode 构建缓存
+    clear_derived_data
+    
+    # 清理之前的构建文件
+    sh("rm -rf ../build") if File.exist?("../build")
+    
+    # 清理 gym 输出
+    sh("rm -rf ./gym") if File.exist?("./gym")
+    
+    UI.success "构建文件清理完成"
+  end
 
-    # Step 7: 构建并导出 .ipa
-    build_app(
-      workspace: "taroApp.xcworkspace", # 或 .xcodeproj
-      scheme: "taroApp",
-      export_method: "app-store", # 可选: ad-hoc, enterprise, development
-      export_options: {
-        provisioningProfiles: {
-          "com.bto.Light" => "BTOLIGHT"
+  desc "📢 发送成功通知"
+  private_lane :notify_success do |message|
+    UI.success message
+    
+    # Slack 通知
+    if ENV["SLACK_WEBHOOK_URL"]
+      slack(
+        message: message,
+        webhook_url: ENV["SLACK_WEBHOOK_URL"],
+        channel: ENV["SLACK_CHANNEL"] || "#ios-builds",
+        username: "iOS Build Bot",
+        icon_emoji: ":rocket:",
+        success: true,
+        payload: {
+          "Build Number" => BUILD_NUMBER,
+          "Version" => VERSION_NUMBER,
+          "App Name" => APP_NAME
         }
-      },
-      export_xcargs: "-allowProvisioningUpdates", # 允许自动创建/更新描述文件
-      suppress_xcode_output: true,
-      clean: true
-    )
+      )
+    end
+    
+    # 企业微信通知
+    if ENV["WECHAT_WEBHOOK_URL"]
+      wechat_work(
+        webhook_url: ENV["WECHAT_WEBHOOK_URL"],
+        message: message
+      )
+    end
+  end
 
-    # 可选：上传 TestFlight
-    # upload_to_testflight(
-    #   skip_waiting_for_build_processing: true,
-    #   notify_external_testers: false
-    # )
+  desc "📢 发送失败通知"
+  private_lane :notify_failure do |message|
+    UI.error message
+    
+    # Slack 通知
+    if ENV["SLACK_WEBHOOK_URL"]
+      slack(
+        message: message,
+        webhook_url: ENV["SLACK_WEBHOOK_URL"],
+        channel: ENV["SLACK_CHANNEL"] || "#ios-builds",
+        username: "iOS Build Bot",
+        icon_emoji: ":x:",
+        success: false,
+        payload: {
+          "Build Number" => BUILD_NUMBER,
+          "Version" => VERSION_NUMBER,
+          "App Name" => APP_NAME
+        }
+      )
+    end
+  end
+
+  # 错误处理
+  error do |lane, exception, options|
+    UI.error "Lane #{lane} 执行失败"
+    UI.error "错误信息: #{exception.message}"
+    
+    # 清理资源
+    cleanup_build_files
+    
+    # 发送失败通知
+    notify_failure("❌ Lane #{lane} 执行失败: #{exception.message}")
+  end
+
+  # 执行完成后的清理工作
+  after_all do |lane, options|
+    UI.success "Lane #{lane} 执行完成"
+    
+    # 可选的清理工作
+    if ENV["CLEAN_AFTER_BUILD"] == "true"
+      cleanup_build_files
+    end
   end
 end
