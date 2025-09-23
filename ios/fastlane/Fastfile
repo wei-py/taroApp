@@ -162,7 +162,7 @@ platform :ios do
     cleanup_build_files
     
     # 禁用 Hermes（如果环境变量设置）
-    disable_hermes_if_needed
+    # disable_hermes_if_needed
     
     # 确保有正确的签名配置
     update_code_signing_settings(
@@ -197,37 +197,6 @@ platform :ios do
     )
     
     UI.success "TestFlight 版本构建完成: #{lane_context[SharedValues::IPA_OUTPUT_PATH]}"
-  end
-
-  # 添加新的私有 lane 来处理 Hermes 配置
-  desc "🔧 禁用 Hermes 引擎"
-  private_lane :disable_hermes_if_needed do
-    if ENV["USE_HERMES"] == "false"
-      UI.header "🔧 禁用 Hermes 引擎"
-      
-      # 修改项目配置文件禁用 Hermes
-      project_path = "taroApp.xcodeproj/project.pbxproj"
-      
-      if File.exist?(project_path)
-        # 读取项目文件
-        project_content = File.read(project_path)
-        
-        # 替换 USE_HERMES = true 为 USE_HERMES = false
-        updated_content = project_content.gsub(/USE_HERMES = true;/, "USE_HERMES = false;")
-        
-        # 写回文件
-        File.write(project_path, updated_content)
-        
-        UI.success "✅ Hermes 已禁用"
-      else
-        UI.error "❌ 找不到项目文件: #{project_path}"
-      end
-      
-      # 清理 Pods 以确保更改生效
-      UI.message "🧹 清理 Pods 以应用 Hermes 配置更改..."
-      sh("rm -rf Pods Podfile.lock") if File.exist?("Pods")
-      sh("pod install --repo-update")
-    end
   end
 
   desc "📤 上传到 App Store Connect"
